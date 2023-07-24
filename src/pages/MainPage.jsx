@@ -14,6 +14,7 @@ const MainPage = () => {
         <Card />
         <Card />
         <Card />
+        <Card />
       </CardContainer>
     </MainPageContainer>
   );
@@ -21,16 +22,25 @@ const MainPage = () => {
 
 const MainPageContainer = styled.div`
   max-width: 1256px;
-  padding: 50px 60px;
   margin: 0 auto;
   width: 100%;
 `;
 
 const CardContainer = styled.div`
   width: 100%;
+  padding: 50px 60px;
   display: grid;
-  grid-gap: 13px 10px;
-  grid-template-columns: repeat(auto-fill, 300px);
+  grid-gap: 26px 20px;
+  grid-template-columns: repeat(4, 1fr);
+
+  @media screen and (max-width: 1025px) {
+    grid-template-columns: repeat(3, 1fr);
+    padding: 50px 30px;
+  }
+  @media screen and (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 50px 10px;
+  }
 `;
 
 export default MainPage;
