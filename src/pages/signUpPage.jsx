@@ -7,7 +7,12 @@ const SignUpPage = () => {
   const navigate = useNavigate();
   return (
     <SignUpPageContainer>
-      <LogoImage src={logo} />
+      <LogoImage
+        src={logo}
+        onClick={() => {
+          navigate("/");
+        }}
+      />
       <SignUpFormContainer>
         <TitleContainer>회원가입</TitleContainer>
         <InputContainer>
@@ -60,11 +65,13 @@ const SignUpPage = () => {
 const SignUpPageContainer = styled.div`
   width: 100%;
   padding: 40px 15px 40px 14px;
+  background-color: rgb(250, 250, 250);
 `;
 
 const LogoImage = styled.img`
   width: 88px;
   height: 31px;
+  cursor: pointer;
 `;
 
 const SignUpFormContainer = styled.div`
@@ -120,6 +127,9 @@ const EmailSelect = styled.select`
   &:focus {
     outline: 3px solid #c8ffff;
   }
+  &:hover {
+    background-color: #f7f8fa;
+  }
 `;
 
 const Input = styled.input`
@@ -133,6 +143,9 @@ const Input = styled.input`
   padding: 0 15px;
   &:focus {
     outline: 3px solid #c8ffff;
+  }
+  &:hover {
+    background-color: #f7f8fa;
   }
 
   ::placeholder {
