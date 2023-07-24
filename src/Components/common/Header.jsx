@@ -9,7 +9,12 @@ const Header = () => {
   return (
     <HeaderLayout>
       <HeaderContainer>
-        <LogoImage src={logo} />
+        <LogoImage
+          src={logo}
+          onClick={() => {
+            navigate("/");
+          }}
+        />
         <ButtonContainer>
           <AccountBtn
             onClick={() => {
@@ -41,6 +46,12 @@ const Header = () => {
 };
 
 const HeaderLayout = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  background-color: #ffff;
   border-bottom: 1px solid #eaedef;
 `;
 const HeaderContainer = styled.div`
