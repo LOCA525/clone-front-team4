@@ -1,6 +1,6 @@
 import React from "react";
 import { styled } from "styled-components";
-import Card from "../Components/Card";
+import Card from "../component/Card";
 
 const MainPage = () => {
   return (

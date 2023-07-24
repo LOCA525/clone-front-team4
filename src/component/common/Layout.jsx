@@ -1,7 +1,7 @@
 import React from "react";
-import Navbar from "../../Components/common/Navbar";
+import Navbar from "./Navbar";
 import { Outlet } from "react-router-dom";
-import Header from "../../Components/common/Header";
+import Header from "./Header";
 
 function Layout() {
   return (

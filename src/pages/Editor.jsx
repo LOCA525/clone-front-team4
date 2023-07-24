@@ -1,5 +1,5 @@
 import React from "react";
-import EditorLayout from "../Components/editor/EditorLayout";
+import EditorLayout from "../component/editor/EditorLayout";
 
 function Editor() {
   return <EditorLayout />;
