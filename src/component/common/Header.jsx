@@ -102,10 +102,9 @@ const PostBtnContainer = styled.div`
   background-color: #35c5f0;
   width: 94.64px;
   height: 40px;
-  padding: 0 16px 0 16px;
+  padding: 0 13px 0 13px;
   margin-left: 13px;
   font-size: 14px;
-  font-weight: 700;
   border-radius: 4px;
   color: #fff;
   cursor: pointer;
