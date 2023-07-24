@@ -5,6 +5,7 @@ import Layout from "./Components/common/Layout";
 import Editor from "./pages/Editor";
 import SignUpPage from "./pages/signUpPage";
 import LoginPage from "./pages/LoginPage";
+import MainPage from "./pages/MainPage";
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/myPage" element={<div>마이페이지</div>} />
           <Route path="/userInfo/:id" element={<div>회원정보페이지</div>} />
-          <Route path="/" element={<div>메인페이지</div>} />
+          <Route path="/" element={<MainPage />} />
           <Route path="/articlePage/:id" element={<div>게시글상세페이지</div>} />
           <Route path="/editor/:id" element={<div>게시글 수정페이지</div>} />
         </Route>
