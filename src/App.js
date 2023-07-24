@@ -1,7 +1,7 @@
 import logo from "./logo.svg";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
-import Layout from "./components/common/Layout";
+import Layout from "./Components/common/Layout";
 import Editor from "./pages/Editor";
 import SignUpPage from "./pages/signUpPage";
 import LoginPage from "./pages/LoginPage";

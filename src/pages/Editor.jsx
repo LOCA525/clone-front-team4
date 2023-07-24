@@ -1,10 +1,8 @@
-import React from 'react'
-import EditorLayout from '../components/editor/EditorLayout'
+import React from "react";
+import EditorLayout from "../Components/editor/EditorLayout";
 
 function Editor() {
-    return (
-        <EditorLayout />
-    )
+  return <EditorLayout />;
 }
 
-export default Editor
+export default Editor;

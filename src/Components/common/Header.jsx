@@ -28,7 +28,7 @@ const Header = () => {
           <UserImage src={userDefaultImage} />
           <PostBtnContainer
             onClick={() => {
-              navigate("/articlePost");
+              navigate("/editor/new");
             }}
           >
             글쓰기
