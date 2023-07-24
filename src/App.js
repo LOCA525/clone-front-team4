@@ -3,13 +3,14 @@ import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import Layout from "./pages/common/Layout";
 import SignUpPage from "./pages/signUpPage";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   return (
     <div className="App">
       <Routes>
         <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/login" element={<div>로그인페이지</div>} />
+        <Route path="/login" element={<LoginPage />} />
         <Route element={<Layout />}>
           <Route path="/myPage" element={<div>마이페이지</div>} />
           <Route path="/userInfo/:id" element={<div>회원정보페이지</div>} />
