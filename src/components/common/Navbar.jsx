@@ -37,6 +37,7 @@ const StNavContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   margin: 0 auto;
+  padding: 0 60px;
 `;
 const StNav = styled.nav`
   display: flex;
