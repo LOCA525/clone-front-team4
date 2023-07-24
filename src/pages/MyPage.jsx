@@ -1,6 +1,6 @@
 import React from 'react'
 import { styled } from 'styled-components'
-import Profile from '../components/MyPageComponents/Profile'
+import Profile from '../components/myPage/Profile'
 
 function MyPage() {
   return (
