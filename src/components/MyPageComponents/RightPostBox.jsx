@@ -2,15 +2,17 @@ import React from 'react'
 import { styled } from 'styled-components'
 import { useNavigate } from 'react-router-dom';
 
-function RightPostBox() {
+function RightPostBox({$pictureName}) {
     const navigate = useNavigate();
     const catImg = "https://i.namu.wiki/i/d1A_wD4kuLHmOOFqJdVlOXVt1TWA9NfNt_HA0CS0Y_N0zayUAX8olMuv7odG2FiDLDQZIRBqbPQwBSArXfEJlQ.webp"
     const pictureCount = 1;
 
+    // 게시글이 4개이상이면 한 줄 더 추가됨
+
   return (
     <StRPBLayout>
         <StRPBTextContainer>
-            <StRPBPictureNameBox>사진</StRPBPictureNameBox>
+            <StRPBPictureNameBox>{$pictureName}</StRPBPictureNameBox>
             <StRPBPictureCountBox>{pictureCount}</StRPBPictureCountBox>
         </StRPBTextContainer>
 
@@ -32,7 +34,7 @@ function RightPostBox() {
 export default RightPostBox
 
 const StRPBLayout = styled.div`
-    padding: 50px 35px;
+    padding: 50px 35px 20px 35px;
 
     box-sizing: border-box;
 `

@@ -7,7 +7,10 @@ function Profile() {
   return (
     <StProfileContainer>
       <LeftProfileBox/>
-      <RightPostBox/>
+      <div>
+        <RightPostBox $pictureName="사진"/>
+        <RightPostBox $pictureName="좋아요"/>
+      </div>
     </StProfileContainer>
   )
 }
