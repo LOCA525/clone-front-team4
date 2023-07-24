@@ -13,7 +13,7 @@ function LeftProfileBox() {
         <StLPBContainer>
 
             <StImgNameContainer>
-                <StImgBox src={catImg}/>
+                <StImgBox $imgSrc={catImg}/>
                 <StNickNameBox>{nickName}</StNickNameBox>
             </StImgNameContainer>
 
@@ -67,7 +67,7 @@ const StImgNameContainer = styled.div`
     margin: 0 auto 20px auto;
 `
 
-const StImgBox = styled.img`
+const StImgBox = styled.div`
     width: 120px;
     height: 120px;
 
@@ -80,6 +80,11 @@ const StImgBox = styled.img`
     border: 1px solid rgba(0, 0, 0, .07);
 
     background-color: #ededed;
+
+    background-image: ${({$imgSrc}) => ($imgSrc ? "url(" + $imgSrc + ")" : "")};
+
+    background-size: cover;
+    background-position: center;
 `
 
 const StNickNameBox = styled.div`
