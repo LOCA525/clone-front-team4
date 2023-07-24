@@ -1,7 +1,8 @@
 import logo from "./logo.svg";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
-import Layout from "./pages/common/Layout";
+import Layout from "./components/common/Layout";
+import Editor from "./pages/Editor";
 
 function App() {
   return (
@@ -14,8 +15,9 @@ function App() {
           <Route path="/userInfo/:id" element={<div>회원정보페이지</div>} />
           <Route path="/mainPage" element={<div>메인페이지</div>} />
           <Route path="/articlePage/:id" element={<div>게시글상세페이지</div>} />
-          <Route path="/articlePost/:id" element={<div>게시글 작성페이지</div>} />
+          <Route path="/editor/:id" element={<div>게시글 수정페이지</div>} />
         </Route>
+        <Route path="/editor/new" element={<Editor />} />
       </Routes>
     </div >
   );
