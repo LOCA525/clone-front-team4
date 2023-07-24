@@ -8,7 +8,7 @@ function NavList({ children, path }) {
     const isCurrent = path === pathname;
     return (
         <StNavList>
-            <StP $isCurrent={isCurrent} onClick={() => {navigate(path)}}>
+            <StP $isCurrent={isCurrent} onClick={() => { navigate(path) }}>
                 {children}
             </StP>
         </StNavList>
