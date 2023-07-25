@@ -1,12 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { ReactComponent as Dots } from '../../assets/ellipsis.svg'
 import { styled } from 'styled-components';
-import { useNavigate } from 'react-router-dom';
 
-function DetailMainTop() {
+function DetailTop() {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
-    const navigate = useNavigate();
 
     // 드롭다운 열기
     const toggleDropdown = () => {
@@ -26,6 +24,16 @@ function DetailMainTop() {
         };
     }, []);
 
+    const handleEditButton = () => {
+
+    }
+
+    const handleDeleteButton = () => {
+        if(window.confirm("정말로 삭제하시겠습니까?")) {
+            
+        }
+    }
+
     return (
         <MainTop>
             <StCategory>
@@ -36,10 +44,10 @@ function DetailMainTop() {
                     <Dots />
                 </StEditButton>
                 <StDropdownMenu $isOpen={isOpen}>
-                    <StDropdownItem onClick={() => navigate("")}>
+                    <StDropdownItem onClick={handleEditButton}>
                         수정하기
                     </StDropdownItem>
-                    <StDropdownItem onClick={() => navigate("")} $color="#FF7777">
+                    <StDropdownItem onClick={handleDeleteButton} $color="#FF7777">
                         삭제하기
                     </StDropdownItem>
                 </StDropdownMenu>
@@ -48,7 +56,7 @@ function DetailMainTop() {
     )
 }
 
-export default DetailMainTop
+export default DetailTop
 
 const MainTop = styled.div`
     display: flex;
