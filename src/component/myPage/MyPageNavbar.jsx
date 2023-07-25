@@ -1,16 +1,22 @@
 import React from "react";
 import { styled } from "styled-components";
 import NavList from "../common/NavList";
+import { useParams } from 'react-router-dom';
 
 function MyPageNavbar() {
+  // const userId = localStorage.get("123")
+  const userId = "123"
+  const { id } = useParams();
+  const correctId = (userId === id)
   
   return (
     <>
       <StContainer style={{ height: "51px" }}>
         <StNavContainer>
           <StNav>
-            <NavList path={"/mypage"}>프로필</NavList>
-            <NavList path={"/mypage/edit"}>회원정보수정</NavList>
+            <NavList path={"/mypage"} $correctId={correctId}>프로필</NavList>
+            {correctId && 
+            (<NavList path={"/mypage/edit"}>회원정보수정</NavList>)}
           </StNav>
         </StNavContainer>
       </StContainer>
