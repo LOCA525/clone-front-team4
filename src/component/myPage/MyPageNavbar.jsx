@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 
 function MyPageNavbar() {
   // const userId = localStorage.get("123")
-  const userId = "123"
+  const userId = "1";
   const { id } = useParams();
   const correctId = (userId === id)
   
@@ -14,9 +14,9 @@ function MyPageNavbar() {
       <StContainer style={{ height: "51px" }}>
         <StNavContainer>
           <StNav>
-            <NavList path={"/mypage"} $correctId={correctId}>프로필</NavList>
+            <NavList path={`/userInfo/${id}`} $correctId={correctId}>프로필</NavList>
             {correctId && 
-            (<NavList path={"/mypage/edit"}>회원정보수정</NavList>)}
+            (<NavList path={`/userInfo/${id}/Edit`}>회원정보수정</NavList>)}
           </StNav>
         </StNavContainer>
       </StContainer>
