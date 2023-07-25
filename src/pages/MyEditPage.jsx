@@ -1,13 +1,13 @@
 import React from 'react'
 import { styled } from 'styled-components'
 import MyPageNavbar from '../component/myPage/MyPageNavbar'
-import MyPageEdit from '../component/myPage/MyPageEdit'
+import MyEdit from '../component/myPage/MyEdit'
 
 function MyEditPage() {
   return (
     <>
       <StMyPageContainer>
-        <MyPageEdit />
+        <MyEdit />
       </StMyPageContainer>
     </>
   )
