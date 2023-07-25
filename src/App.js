@@ -1,11 +1,12 @@
 import logo from "./logo.svg";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
-import Layout from "./components/common/Layout";
+import Layout from "./component/common/Layout";
 import Editor from "./pages/Editor";
 import SignUpPage from "./pages/signUpPage";
 import LoginPage from "./pages/LoginPage";
-import MyPage from "./pages/MyPage"
+import MainPage from "./pages/MainPage";
+import MyPage from "./pages/MyPage";
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/myPage" element={<MyPage/>} />
           <Route path="/userInfo/:id" element={<div>회원정보페이지</div>} />
-          <Route path="/" element={<div>메인페이지</div>} />
+          <Route path="/" element={<MainPage />} />
           <Route path="/articlePage/:id" element={<div>게시글상세페이지</div>} />
           <Route path="/editor/:id" element={<div>게시글 수정페이지</div>} />
         </Route>
