@@ -17,9 +17,9 @@ const LoginPage = () => {
               }}
             />
           </LogoContainer>
-          <EmailInput placeholder="이메일" />
-          <PwInput placeholder="비밀번호" />
-          <LoginBtn>로그인</LoginBtn>
+          <EmailInput placeholder="이메일" required />
+          <PwInput placeholder="비밀번호" required />
+          <LoginBtn type="submit">로그인</LoginBtn>
           <SignUpLink
             onClick={() => {
               navigate("/signup");
@@ -40,7 +40,7 @@ const LoginPageContainer = styled.div`
   background-color: rgb(250, 250, 250);
 `;
 
-const LoginFormContainer = styled.div`
+const LoginFormContainer = styled.form`
   width: 300px;
   height: 100vh;
   display: flex;
@@ -98,7 +98,7 @@ const PwInput = styled.input`
   }
 `;
 
-const LoginBtn = styled.div`
+const LoginBtn = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;

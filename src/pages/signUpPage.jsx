@@ -11,7 +11,6 @@ const SignUpPage = () => {
     register,
     formState: { errors },
     handleSubmit,
-    setError,
     getValues,
   } = useForm({ mode: "onBlur" });
 
@@ -33,7 +32,7 @@ const SignUpPage = () => {
             password: data.password,
             nickname: data.nickname,
           };
-          console.log(newForm);
+          console.log("newForm", newForm);
           try {
             onValid(data);
           } catch (e) {
@@ -49,6 +48,10 @@ const SignUpPage = () => {
               placeholder="이메일"
               {...register("email", {
                 required: "필수 입력 항목입니다.",
+                pattern: {
+                  value: /^[a-zA-Z\d]{2,}$/,
+                  message: "이메일 형식이 올바르지 않습니다.",
+                },
               })}
             />
             @
