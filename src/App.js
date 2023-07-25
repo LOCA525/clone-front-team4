@@ -9,6 +9,7 @@ import MainPage from "./pages/MainPage";
 import Detail from "./pages/Detail";
 import MyPage from "./pages/MyPage";
 import Layout2 from "./component/common/Layout2";
+import MyEditPage from "./pages/MyEditPage"
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         </Route>
         <Route element={<Layout2 />}>
           <Route path="/myPage" element={<MyPage />} />
+          <Route path="/myPage/Edit" element={<MyEditPage />} />
         </Route>
       <Route path="/editor/new" element={<Editor />} />
     </Routes>

@@ -1,18 +1,19 @@
 import React from 'react'
 import { styled } from 'styled-components'
-import Profile from "../component/myPage/Profile"
+import MyPageNavbar from '../component/myPage/MyPageNavbar'
+import MyPageEdit from '../component/myPage/MyPageEdit'
 
-function MyPage() {
+function MyEditPage() {
   return (
     <>
       <StMyPageContainer>
-        <Profile />
+        <MyPageEdit />
       </StMyPageContainer>
     </>
   )
 }
 
-export default MyPage
+export default MyEditPage
 
 const StMyPageContainer = styled.div`
     max-width: 1256px;

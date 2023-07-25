@@ -3,13 +3,14 @@ import { styled } from "styled-components";
 import NavList from "../common/NavList";
 
 function MyPageNavbar() {
+  
   return (
     <>
       <StContainer style={{ height: "51px" }}>
         <StNavContainer>
           <StNav>
             <NavList path={"/mypage"}>프로필</NavList>
-            <NavList path={""}>회원정보수정</NavList>
+            <NavList path={"/mypage/edit"}>회원정보수정</NavList>
           </StNav>
         </StNavContainer>
       </StContainer>
