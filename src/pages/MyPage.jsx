@@ -1,16 +1,14 @@
 import React from 'react'
 import { styled } from 'styled-components'
 import Profile from "../component/myPage/Profile"
-import MyPageEdit from "../component/myPage/MyPageEdit"
 
 function MyPage() {
   return (
-    //네비게이션바 필요(프로필/수정) , 선택됨에 따라 profile, 수정 선택돼서 랜더링
-    <StMyPageContainer>
-        {/* <Profile/> */}
-        {/* 수정 */}
-        <MyPageEdit/>
-    </StMyPageContainer>
+    <>
+      <StMyPageContainer>
+        <Profile />
+      </StMyPageContainer>
+    </>
   )
 }
 
