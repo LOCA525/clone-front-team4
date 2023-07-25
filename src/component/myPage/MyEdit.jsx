@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { styled } from "styled-components";
 
-function MyPageEdit() {
+function MyEdit() {
   const [nicknameContent, setNicknameContent] = useState("");
   const [oneLineContent, setOneLineContent] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
@@ -83,7 +83,7 @@ function MyPageEdit() {
   );
 }
 
-export default MyPageEdit;
+export default MyEdit;
 
 const StMPELayout = styled.div`
   margin: 50px auto;

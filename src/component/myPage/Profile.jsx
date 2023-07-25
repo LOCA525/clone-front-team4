@@ -3,13 +3,13 @@ import LeftProfileBox from './LeftProfileBox'
 import { styled } from 'styled-components'
 import RightPostBox from './RightPostBox'
 
-function Profile() {
+function Profile({$correctId}) {
   return (
     <StProfileContainer>
-      <LeftProfileBox/>
+      <LeftProfileBox $correctId={$correctId}/>
       <div>
         <RightPostBox $pictureName="사진"/>
-        <RightPostBox $pictureName="좋아요"/>
+        {$correctId && (<RightPostBox $pictureName="좋아요"/>) } 
       </div>
     </StProfileContainer>
   )
