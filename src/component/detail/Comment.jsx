@@ -45,7 +45,6 @@ function Comment() {
                     <CommentContent $focused={isFocused} onClick={handleContentClick}>
                         <CommentContentInput
                             ref={textareaRef}
-                            contentEditable={true}
                             spellCheck="false"
                             placeholder="칭찬과 격려의 댓글은 작성자에게 큰 힘이 됩니다:)"
                             value={content}
