@@ -6,6 +6,7 @@ import Editor from "./pages/Editor";
 import SignUpPage from "./pages/signUpPage";
 import LoginPage from "./pages/LoginPage";
 import MainPage from "./pages/MainPage";
+import MyPage from "./pages/MyPage";
 
 function App() {
   return (
