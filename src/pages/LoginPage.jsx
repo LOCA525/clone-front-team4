@@ -27,6 +27,14 @@ const LoginPage = () => {
       const res = await postLoginApi(body);
       if (res.status === 200) {
         console.log("로그인성공", res);
+        localStorage.setItem(
+          "logInUser",
+          JSON.stringify({
+            nickname: res.data.data.nickname,
+            userImage: res.data.data.userImage,
+          })
+        );
+        navigate("/");
       }
     } catch (error) {
       console.log(error);
