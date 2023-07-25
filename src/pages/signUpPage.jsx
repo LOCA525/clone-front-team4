@@ -3,10 +3,10 @@ import logo from "../images/fullLogo.png";
 import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { postSignupApi } from "../api/auth";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
-
   const {
     register,
     formState: { errors },
@@ -14,9 +14,6 @@ const SignUpPage = () => {
     getValues,
   } = useForm({ mode: "onBlur" });
 
-  const onValid = (data) => {
-    console.log("성공!", data);
-  };
   return (
     <SignUpPageContainer>
       <LogoImage
@@ -26,17 +23,21 @@ const SignUpPage = () => {
         }}
       />
       <SignUpFormContainer
-        onSubmit={handleSubmit((data) => {
+        onSubmit={handleSubmit(async (data) => {
           const newForm = {
             email: `${data.email}${data.select}`,
             password: data.password,
             nickname: data.nickname,
           };
-          console.log("newForm", newForm);
           try {
-            onValid(data);
-          } catch (e) {
-            console.log(e);
+            const res = await postSignupApi(newForm);
+            if (res.status === 201) {
+              console.log("회원가입성공", res);
+              navigate("/login");
+            }
+          } catch (error) {
+            console.log(error);
+            alert(JSON.stringify(error.response.data.data.data));
           }
         })}
       >

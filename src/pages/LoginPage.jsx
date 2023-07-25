@@ -1,9 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import { styled } from "styled-components";
 import logo from "../images/fullLogo.png";
 import { useNavigate } from "react-router-dom";
+import { postLoginApi } from "../api/auth";
 const LoginPage = () => {
   const navigate = useNavigate();
+
+  const [loginInputs, setLoginInputs] = useState({
+    email: "",
+    password: "",
+  });
+
+  const { email, password } = loginInputs;
+
+  const onChange = (event) => {
+    const { value, name } = event.target;
+    setLoginInputs({
+      ...loginInputs,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (body) => {
+    try {
+      console.log(body);
+      const res = await postLoginApi(body);
+      if (res.status === 200) {
+        console.log("로그인성공", res);
+      }
+    } catch (error) {
+      console.log(error);
+      alert(error.response.data.message);
+    }
+  };
 
   return (
     <LoginPageContainer>
@@ -17,9 +46,24 @@ const LoginPage = () => {
               }}
             />
           </LogoContainer>
-          <EmailInput placeholder="이메일" required />
-          <PwInput placeholder="비밀번호" required />
-          <LoginBtn type="submit">로그인</LoginBtn>
+          <EmailInput placeholder="이메일" type="text" name="email" value={email} onChange={onChange} required />
+          <PwInput
+            placeholder="비밀번호"
+            type="password"
+            name="password"
+            value={password}
+            onChange={onChange}
+            required
+          />
+          <LoginBtn
+            type="submit"
+            onClick={(e) => {
+              e.preventDefault();
+              handleSubmit(loginInputs);
+            }}
+          >
+            로그인
+          </LoginBtn>
           <SignUpLink
             onClick={() => {
               navigate("/signup");
