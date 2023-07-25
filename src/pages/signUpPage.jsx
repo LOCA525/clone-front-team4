@@ -2,9 +2,18 @@ import React from "react";
 import logo from "../images/fullLogo.png";
 import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { postSignupApi } from "../api/auth";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    getValues,
+  } = useForm({ mode: "onBlur" });
+
   return (
     <SignUpPageContainer>
       <LogoImage
@@ -13,40 +22,121 @@ const SignUpPage = () => {
           navigate("/");
         }}
       />
-      <SignUpFormContainer>
+      <SignUpFormContainer
+        onSubmit={handleSubmit(async (data) => {
+          const newForm = {
+            email: `${data.email}${data.select}`,
+            password: data.password,
+            nickname: data.nickname,
+          };
+          try {
+            const res = await postSignupApi(newForm);
+            if (res.status === 201) {
+              console.log("회원가입성공", res);
+              navigate("/login");
+            }
+          } catch (error) {
+            console.log(error);
+            alert(JSON.stringify(error.response.data.data.data));
+          }
+        })}
+      >
         <TitleContainer>회원가입</TitleContainer>
         <InputContainer>
           <InputTitle>이메일</InputTitle>
           <EmailInputContainer>
-            <Input placeholder="이메일" /> @
-            <EmailSelect>
+            <Input
+              placeholder="이메일"
+              {...register("email", {
+                required: "필수 입력 항목입니다.",
+                pattern: {
+                  value: /^[a-zA-Z\d]{2,}$/,
+                  message: "이메일 형식이 올바르지 않습니다.",
+                },
+              })}
+            />
+            @
+            <EmailSelect
+              {...register("select", {
+                required: "필수 입력 항목입니다.",
+              })}
+            >
               <option value="" disabled="">
                 선택해주세요
               </option>
-              <option value="naver.com">naver.com</option>
-              <option value="hanmail.net">hanmail.net</option>
-              <option value="daum.net">daum.net</option>
-              <option value="gmail.com">gmail.com</option>
-              <option value="nate.com">nate.com</option>
-              <option value="hotmail.com">hotmail.com</option>
+              <option value="@naver.com">naver.com</option>
+              <option value="@hanmail.net">hanmail.net</option>
+              <option value="@daum.net">daum.net</option>
+              <option value="@gmail.com">gmail.com</option>
+              <option value="@nate.com">nate.com</option>
+              <option value="@hotmail.com">hotmail.com</option>
             </EmailSelect>
           </EmailInputContainer>
+          <ValidateMessage>{errors?.email?.message}</ValidateMessage>
         </InputContainer>
         <InputContainer>
           <InputTitle>비밀번호</InputTitle>
           <InputInfo>영문, 숫자를 포함한 8자 이상의 비밀번호를 입력해주세요.</InputInfo>
-          <Input type="password" placeholder="비밀번호" />
+          <Input
+            type="password"
+            placeholder="비밀번호"
+            {...register("password", {
+              required: "필수 입력 항목입니다.",
+              minLength: {
+                value: 8,
+                message: "비밀번호는 8자 이상이어야 합니다.",
+              },
+              pattern: {
+                value: /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/,
+                message: "비밀번호는 영문, 숫자를 포함하여 8자 이상이어야 합니다.",
+              },
+            })}
+          />
+          <ValidateMessage>{errors?.password?.message}</ValidateMessage>
         </InputContainer>
+
         <InputContainer>
           <InputTitle>비밀번호 확인</InputTitle>
-          <Input type="password" placeholder="비밀번호 확인" />
+          <Input
+            type="password"
+            placeholder="비밀번호 확인"
+            {...register("confirmPassword", {
+              required: "필수 입력 항목입니다.",
+              validate: {
+                check: (value) => {
+                  if (getValues("password") !== value) {
+                    return "비밀번호가 일치하지 않습니다.";
+                  }
+                },
+              },
+            })}
+          />
+          <ValidateMessage>{errors?.confirmPassword?.message}</ValidateMessage>
         </InputContainer>
         <InputContainer>
           <InputTitle>닉네임</InputTitle>
           <InputInfo>다른 유저와 겹치지 않도록 입력해주세요. (2~15자)</InputInfo>
-          <Input placeholder="별명 (2~15자)" />
+          <Input
+            placeholder="별명 (2~15자)"
+            {...register("nickname", {
+              required: "필수 입력 항목입니다.",
+              minLength: {
+                value: 2,
+                message: "2자 이상 입력해주세요.",
+              },
+              maxLength: {
+                value: 15,
+                message: "15자 이하로 입력해주세요.",
+              },
+              pattern: {
+                value: /^[A-za-z0-9가-힣]{3,10}$/,
+                message: "가능한 문자: 영문 대소문자, 글자 단위 한글, 숫자만 가능합니다.",
+              },
+            })}
+          />
+          <ValidateMessage>{errors?.nickname?.message}</ValidateMessage>
         </InputContainer>
-        <SubmitBtn>회원가입하기</SubmitBtn>
+        <SubmitBtn type="submit">회원가입하기</SubmitBtn>
         <LinkInfo>
           <div>이미 아이디가 있으신가요?</div>
           <LogInLink
@@ -74,7 +164,7 @@ const LogoImage = styled.img`
   cursor: pointer;
 `;
 
-const SignUpFormContainer = styled.div`
+const SignUpFormContainer = styled.form`
   padding-top: 60px;
   width: 360px;
   margin: 0 auto;
@@ -153,7 +243,7 @@ const Input = styled.input`
   }
 `;
 
-const SubmitBtn = styled.div`
+const SubmitBtn = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -188,4 +278,8 @@ const LogInLink = styled.div`
   cursor: pointer;
 `;
 
+const ValidateMessage = styled.p`
+  color: #ff7777;
+  font-size: 14px;
+`;
 export default SignUpPage;
