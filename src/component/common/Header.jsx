@@ -6,6 +6,8 @@ import chevronDownIcon from "../../images/downIcon.png";
 import { useNavigate } from "react-router-dom";
 const Header = () => {
   const navigate = useNavigate();
+  const logInuser = JSON.parse(localStorage.getItem("logInUser"));
+  console.log(logInuser);
   return (
     <HeaderLayout>
       <HeaderContainer>
@@ -16,24 +18,33 @@ const Header = () => {
           }}
         />
         <ButtonContainer>
-          <AccountBtn
-            onClick={() => {
-              navigate("/login");
-            }}
-          >
-            로그인
-          </AccountBtn>
-          <AccountBtn
-            onClick={() => {
-              navigate("/signup");
-            }}
-          >
-            회원가입
-          </AccountBtn>
-          <UserImage src={userDefaultImage} />
+          {logInuser === null ? (
+            <>
+              <AccountBtn
+                onClick={() => {
+                  navigate("/login");
+                }}
+              >
+                로그인
+              </AccountBtn>
+              <AccountBtn
+                onClick={() => {
+                  navigate("/signup");
+                }}
+              >
+                회원가입
+              </AccountBtn>
+            </>
+          ) : (
+            <UserImage src={userDefaultImage} />
+          )}
           <PostBtnContainer
             onClick={() => {
-              navigate("/editor/new");
+              if (logInuser === null) {
+                navigate("/login");
+              } else {
+                navigate("/editor/new");
+              }
             }}
           >
             글쓰기
