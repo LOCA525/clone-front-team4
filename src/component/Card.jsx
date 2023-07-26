@@ -82,6 +82,12 @@ const CardContainer = styled.div`
   &:hover ${ContentContainer} {
     color: gray;
   }
+
+  @media screen and (max-width: 768px) {
+    &:hover ${ImageContainer} {
+      background-size: cover;
+    }
+  }
 `;
 
 const UserName = styled.div`
