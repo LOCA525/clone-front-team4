@@ -32,6 +32,7 @@ const LoginPage = () => {
           JSON.stringify({
             nickname: res.data.data.nickname,
             userImage: res.data.data.userImage,
+            introduce: res.data.data.introduce,
           })
         );
         navigate("/");
