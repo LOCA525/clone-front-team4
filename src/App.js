@@ -25,13 +25,13 @@ function App() {
           <Route element={<Layout />}>
             <Route path="/" element={<MainPage />} />
             <Route path="/articlePage/:id" element={<Detail />} />
-            <Route path="/editor/:id" element={<div>게시글 수정페이지</div>} />
           </Route>
           <Route element={<Layout2 />}>
             <Route path="/userInfo/:id" element={<MyPage />} />
             <Route path="/userInfo/:id/Edit" element={<MyEditPage />} />
             <Route path="/userInfo/:id" element={<MyPage />} />
           </Route>
+          <Route path="/editor/:id" element={<Editor />} />
           <Route path="/editor/new" element={<Editor />} />
         </Routes>
       </QueryClientProvider>
