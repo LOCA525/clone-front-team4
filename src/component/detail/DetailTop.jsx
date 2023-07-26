@@ -2,9 +2,11 @@ import React, { useEffect, useRef, useState } from 'react'
 import { ReactComponent as Dots } from '../../assets/ellipsis.svg'
 import { styled } from 'styled-components';
 import { deletePostApi } from '../../api/posts';
+import { useNavigate } from 'react-router-dom';
 
 function DetailTop({ data }) {
     const [isOpen, setIsOpen] = useState(false);
+    const navigate = useNavigate();
     const loginUser = JSON.parse(localStorage.getItem("logInUser"));
     const isUser = (loginUser) && (data.nickname === loginUser.nickname);
     const dropdownRef = useRef(null);
@@ -27,16 +29,19 @@ function DetailTop({ data }) {
         };
     }, []);
 
+    // 수정하기 버튼
     const handleEditButton = () => {
-
+        navigate(`/editor/${data.postId}`);
     }
 
+    // 삭제하기 버튼
     const handleDeleteButton = async () => {
         if (window.confirm("정말로 삭제하시겠습니까?")) {
             try {
                 const res = await deletePostApi(data.postId);
                 if (res.status <= 300) {
                     console.log("성공", res);
+                    navigate(-1);
                 };
             } catch (error) {
                 console.log(error);
@@ -55,10 +60,10 @@ function DetailTop({ data }) {
                         <Dots />
                     </StEditButton>
                     <StDropdownMenu $isOpen={isOpen}>
-                        <StDropdownItem onClick={handleEditButton}>
+                        <StDropdownItem $isOpen={isOpen} onClick={handleEditButton}>
                             수정하기
                         </StDropdownItem>
-                        <StDropdownItem onClick={handleDeleteButton} $color="#FF7777">
+                        <StDropdownItem $isOpen={isOpen} onClick={handleDeleteButton} $color="#FF7777">
                             삭제하기
                         </StDropdownItem>
                     </StDropdownMenu>
@@ -109,6 +114,8 @@ const StDropdownMenu = styled.div`
     border: 1px solid #DADDE0;
     border-radius: 6px;
     opacity: ${({ $isOpen }) => $isOpen ? 1 : 0};
+    visibility: ${({ $isOpen }) => $isOpen ? "visible" : "hidden"};
+    pointer-events: ${({ $isOpen }) => $isOpen ? "" : "none"};
     transition: all 0.2s ease 0s;
 
     box-shadow: 0 4px 10px 0 rgba(63, 71, 77, 0.2);

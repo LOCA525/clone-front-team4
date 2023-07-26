@@ -4,42 +4,37 @@ import EditorList from './EditorList';
 import EditorHeader from './EditorHeader';
 import EditorCategory from './EditorCategory';
 import { getDetailPostApi, postPostsApi } from '../../api/posts';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useQuery } from 'react-query';
 
 function EditorLayout() {
     const [category, setCategory] = useState("");
     const { id } = useParams();
     const [ready, setReady] = useState(false);
-    const [formData, setFormData] = useState(new FormData());
+    const navigate = useNavigate();
+    const formData = new FormData();
     const [editorList, setEditorList] = useState([
         {
-            id: 1,
+            id: Date.now(),
             image: "",
             content: ""
         }
     ]);
 
     useEffect(() => {
-        if (id) {
-            const test = async () => {
-                const res = await getDetailPostApi(id);
-                console.log(res.data.data);
-            }
-            test();
+        if (editorList.length === 0) {
+            setEditorList({
+                id: Date.now(),
+                image: "",
+                content: ""
+            })
         }
-    })
-
-    // 카테고리 선택하고 모든 이미지가 업로드 됐을 때 올리기 버튼 활성화
-    useEffect(() => {
-        const editorUploaded = editorList.every(editor => editor.image);
-        setReady(!!editorUploaded && !!category);
-    }, [editorList, category]);
+    }, [editorList])
 
     // 사진 추가 버튼 클릭시 새로운 Editor 추가
     const handleAddEditor = () => {
-        const newId = editorList.length + 1;
         const newEditor = {
-            id: newId,
+            id: Date.now(),
             image: "",
             content: ""
         };
@@ -56,7 +51,6 @@ function EditorLayout() {
                 return editor;
             });
         });
-        formData.append("image", newImage);
     };
 
     // 내용 입력 시 editorList 업데이트
@@ -76,6 +70,7 @@ function EditorLayout() {
         setCategory(selectedCategory);
     };
 
+    // 올리기 버튼
     const handleSubmitButton = async () => {
         formData.set("category", category);
         const content = [];
@@ -83,26 +78,57 @@ function EditorLayout() {
             content.push({ content: editor.content });
         });
         formData.set("content", new Blob([JSON.stringify(content)], { type: "application/json" }));
+        editorList.forEach((editor) => {
+            formData.append("image", editor.image);
+        });
         formData.set("imageCount", editorList.length);
-        // console.log(content);
-        // for(let pair of formData.keys()) {
-        //     console.log(pair, formData.get(pair));
-        // }
+        for(let pair of formData.keys()) {
+            console.log(pair, formData.get(pair));
+        }
+        console.log(editorList);
         try {
             const res = await postPostsApi(formData);
             if (res.status <= 300) {
                 console.log("성공", res);
+                navigate(-1);
             };
         } catch (error) {
             console.log(error);
         };
     };
 
+    // 카테고리 선택하고 모든 이미지가 업로드 됐을 때 올리기 버튼 활성화
+    useEffect(() => {
+        const editorUploaded = editorList.every(editor => editor.image);
+        setReady(!!editorUploaded && !!category);
+    }, [editorList, category]);
+
+    const { data, isLoading, isError } = useQuery(
+        ["posts", id],
+        async () => {
+            if (id) {
+                const res = await getDetailPostApi(id);
+                const temp = res.data.data;
+                return res.data.data
+            } else {
+                return
+            }
+        }
+    );
+
+    if (isLoading) {
+        return <h2>Loading...</h2>
+    }
+
+    if (isError) {
+        return <h2>error...</h2>
+    }
+
     return (
         <>
             <EditorHeader imgUp={ready} onClickSubmit={handleSubmitButton} />
             <EditorBody>
-                <EditorCategory onCategoryChange={handleCategoryChange} />
+                <EditorCategory category={category} onCategoryChange={handleCategoryChange} />
                 <StOrderedList>
                     {
                         editorList.map((item) => {
@@ -110,10 +136,10 @@ function EditorLayout() {
                                 <StListItem key={item.id}>
                                     <EditorList
                                         id={item.id}
+                                        editorList={editorList}
                                         onImageChange={handleImageChange}
                                         onContentChange={handleContentChange}
-                                        formData={formData}
-                                        setFormData={setFormData}
+                                        setEditorList={setEditorList}
                                     />
                                 </StListItem>
                             )

@@ -7,7 +7,7 @@ function EditorHeader({ imgUp, onClickSubmit }) {
         <StContainer style={{ height: "81px" }}>
             <StEditorHeader>
                 <StHeaderContainer>
-                    <StA aria-label='오늘의집' href="/mypage">
+                    <StA aria-label='오늘의집' href="/">
                         <Logo />
                     </StA>
                     <StButton $width={"132px"} $imgUp={imgUp} onClick={onClickSubmit}>올리기</StButton>

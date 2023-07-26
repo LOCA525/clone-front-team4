@@ -1,8 +1,10 @@
 import React, { useRef, useState } from 'react'
 import { ReactComponent as Camera } from '../../assets/camera.svg'
+import { ReactComponent as Update } from '../../assets/update.svg'
+import { ReactComponent as Delete } from '../../assets/delete.svg'
 import { styled } from 'styled-components'
 
-function EditorList({ id, onImageChange, onContentChange, formData, setFormData }) {
+function EditorList({ id, onImageChange, onContentChange, editorList, setEditorList }) {
     const [image, setImage] = useState(""); // 미리보기로 보여줄 이미지
     const [onDrag, setOnDrag] = useState(false);
     const [paddingBottom, setPaddingBottom] = useState(null);
@@ -12,7 +14,7 @@ function EditorList({ id, onImageChange, onContentChange, formData, setFormData 
     const stContentRef = useRef(null);
 
     // 숨겨진 파일 업로드 input을 클릭하는 역할
-    const handleButtonClick = () => {
+    const handleUploadButton = () => {
         fileInputRef.current.click();
     }
 
@@ -20,10 +22,9 @@ function EditorList({ id, onImageChange, onContentChange, formData, setFormData 
     const handleImage = (e) => {
         const file = e.target.files[0];
         if (!file) {
-            setImage("");
             return;
         }
-        const reader = new FileReader()
+        const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
             setImage(reader.result); // 미리보기로 보여줄 이미지 업데이트
@@ -75,6 +76,16 @@ function EditorList({ id, onImageChange, onContentChange, formData, setFormData 
         }
         onContentChange(id, contentRef.current.value);
     }
+
+    // 사진 삭제
+    const handleDeleteButton = () => {
+        setEditorList(list => list.filter(item => item.id !== id));
+        onImageChange(id, null);
+        setImage("");
+        setPaddingBottom(null);
+        onContentChange(id, "");
+    };
+
     return (
         <>
             <StFormList>
@@ -96,15 +107,23 @@ function EditorList({ id, onImageChange, onContentChange, formData, setFormData 
                                         <StSpan $size={"16px"} $height={"20px"} $weight={"700"}>
                                             사진을 끌어다 놓으세요
                                         </StSpan>
-                                        <StButton onClick={handleButtonClick}>PC에서 불러오기</StButton>
-                                        <input ref={fileInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleImage} aria-label='사진 업로드' />
+                                        <StButton onClick={handleUploadButton}>PC에서 불러오기</StButton>
                                     </StImageInput>
                                 </StImage>
                             ) : (
                                 <StImage $bottom={`${paddingBottom}%`}>
                                     <StUploadImage src={image ? image : "null"} alt="" />
+                                    <StImageButtonArea>
+                                        <ImageButton onClick={handleUploadButton}>
+                                            <Update />
+                                        </ImageButton>
+                                        <ImageButton onClick={handleDeleteButton}>
+                                            <Delete />
+                                        </ImageButton>
+                                    </StImageButtonArea>
                                 </StImage>)
                         }
+                        <input ref={fileInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleImage} aria-label='사진 업로드' />
                     </StImageAreaItem>
                 </StImageArea>
                 <StContentArea>
@@ -141,13 +160,6 @@ const StImageAreaItem = styled.div`
     border-radius: 4px;
 `
 
-const StImage = styled.div`
-    width: 100%;
-    padding-bottom: ${({ $bottom }) => $bottom ? $bottom : "100%"};
-    background-color: #F7F8FA;
-    border-radius: 4px;
-`
-
 const StUploadImage = styled.img`
     position: absolute;
     display: block;
@@ -155,6 +167,50 @@ const StUploadImage = styled.img`
     right: 0px;
     width: 100%;
     border-radius: 4px;
+`
+
+const StImageButtonArea = styled.div`
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 40px 16px 16px;
+    border-radius: inherit;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.54));
+    color: rgb(255, 255, 255);
+    font-size: 0px;
+    line-height: 0;
+    transition: opacity 0.1s ease 0s;
+    opacity: 0;
+`
+
+const ImageButton = styled.button`
+    display: inline-block;
+    position: relative;
+    padding: 0px;
+    margin: 0px;
+    margin-right: 24px;
+    border: none;
+    background: none;
+    transition: opacity 0.1s ease 0s;
+    cursor: pointer;
+
+    &:hover {
+        opacity: 0.6
+    }
+`
+
+const StImage = styled.div`
+    width: 100%;
+    padding-bottom: ${({ $bottom }) => $bottom ? $bottom : "100%"};
+    background-color: #F7F8FA;
+    border-radius: 4px;
+    position: relative;
+    
+    &:hover ${StImageButtonArea} {
+        opacity: 1;
+    }
 `
 
 const StImageInput = styled.div`

@@ -1,9 +1,15 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { styled } from 'styled-components';
 
-function EditorCategory({ onCategoryChange }) {
+function EditorCategory({ category, onCategoryChange }) {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState('');
+
+    useEffect(() => {
+        if (category) {
+            setSelectedItem(category);
+        }
+    }, [category])
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);

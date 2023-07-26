@@ -9,7 +9,7 @@ function Navbar() {
         <StNavContainer>
           <StNav>
             {/* 테스트 리스트*/}
-            <NavList path={"/mypage"}>전체</NavList>
+            <NavList path={"/"}>전체</NavList>
             <NavList path={"/articlePage/1"}>집사진</NavList>
             <NavList path={"/userinfo/1"}>취미일상</NavList>
           </StNav>
