@@ -168,6 +168,7 @@ const DownIconImage = styled.img`
 
 const UserImageWrapper = styled.div`
   position: relative;
+  display: flex;
 `;
 
 const Modal = styled.div`

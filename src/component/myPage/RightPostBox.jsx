@@ -10,14 +10,14 @@ function RightPostBox({ $pictureName, $userData }) {
     userDataArray = Object.values($userData);
   }
 
-  const remainderItemOperation = 4 - (userDataArray.length % 4) === 4;
+  const remainderItemOperation = 4 - (userDataArray.length % 4);
 
   const remainingItems =
     userDataArray.length === 0
       ? 4
-      : remainderItemOperation
+      : (remainderItemOperation === 0
       ? 0
-      : remainderItemOperation
+      : remainderItemOperation)
 
   return (
     <StRPBLayout>
@@ -32,7 +32,7 @@ function RightPostBox({ $pictureName, $userData }) {
             key={item.postId}
             $imgSrc={item.postImage}
             onClick={() => {
-              navigate(`/articlePage/${item.postId}`);
+              navigate(`/detail/${item.postId}`);
             }}
             style={{ cursor: "pointer" }}
           />
