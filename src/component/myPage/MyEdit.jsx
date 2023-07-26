@@ -1,11 +1,17 @@
 import React, { useState, useRef } from "react";
 import { styled } from "styled-components";
+import userDefaultImage from "../../images/userDefault.png";
+import { putUserUpdate } from "../../api/auth";
+import { useMutation } from 'react-query';
 
 function MyEdit() {
-  const [nicknameContent, setNicknameContent] = useState("");
-  const [oneLineContent, setOneLineContent] = useState("");
+  const userDataString = localStorage.getItem('logInUser');
+  const userData = JSON.parse(userDataString);
+  const [nicknameContent, setNicknameContent] = useState(userData.nickname);
+  const [oneLineContent, setOneLineContent] = useState(userData?.introduce);
   const [selectedFile, setSelectedFile] = useState(null);
-  const profileImg = "https://i.namu.wiki/i/d1A_wD4kuLHmOOFqJdVlOXVt1TWA9NfNt_HA0CS0Y_N0zayUAX8olMuv7odG2FiDLDQZIRBqbPQwBSArXfEJlQ.webp";
+  const profileImg = (userData.userImage === "default" ? userDefaultImage : userData.userImage);
+  const inputRef = useRef(null);
 
   // 입력한 값이 없을 때 에러 메시지 표시 여부를 결정하는 함수
   const isNicknameContentEmpty = nicknameContent.trim().length === 0;
@@ -19,10 +25,19 @@ function MyEdit() {
     inputRef.current.click();
   };
 
+  //api 연결..
+  const mutation = useMutation(putUserUpdate, {
+    onSuccess: (data) => {
+      console.log('요청 성공 - 응답 데이터:', data);
+    },
+    onError: (error) => {
+      console.error('요청 실패:', error);
+    },
+  });
+
   const handleSubmit = (e) => {
     e.preventDefault();
   
-    console.log("안녕")
     if (isNicknameContentEmpty){
       // 스크롤 올라가기
       const inputWrapper = document.getElementById("nicknameInputWrapper");
@@ -35,11 +50,14 @@ function MyEdit() {
       // focus
       inputRef.current.focus();
     }else{
-      //내용 보내기
+      const updatedData = {
+          "introduce" : oneLineContent,
+          "nickname" : nicknameContent,
+          "image" : selectedFile
+      };
+      mutation.mutate(updatedData);
     }
   };
-
-  const inputRef = useRef(null);
 
   return (
       <StMPELayout onSubmit={handleSubmit}>
@@ -78,7 +96,7 @@ function MyEdit() {
             />
             <StMPEImgLabelBox onClick={handleImgClick}>
               {selectedFile ? (
-                <StMPEImgBox src={URL.createObjectURL(selectedFile)} alt="선택된 이미지" />
+                <StMPEImgBox src={URL.createObjectURL(selectedFile)} alt="프로필 이미지" />
               ) : (
                 <StMPEImgBox src={profileImg} alt="프로필 이미지" />
               )}
