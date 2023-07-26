@@ -2,7 +2,7 @@ import React from 'react'
 import { styled, css } from 'styled-components'
 import { ReactComponent as Logo } from '../../assets/logo.svg'
 
-function EditorHeader({ imgUp }) {
+function EditorHeader({ imgUp, onClickSubmit }) {
     return (
         <StContainer style={{ height: "81px" }}>
             <StEditorHeader>
@@ -10,7 +10,7 @@ function EditorHeader({ imgUp }) {
                     <StA aria-label='오늘의집' href="/mypage">
                         <Logo />
                     </StA>
-                    <StButton $width={"132px"} $imgUp={imgUp}>올리기</StButton>
+                    <StButton $width={"132px"} $imgUp={imgUp} onClick={onClickSubmit}>올리기</StButton>
                 </StHeaderContainer>
             </StEditorHeader>
         </StContainer>

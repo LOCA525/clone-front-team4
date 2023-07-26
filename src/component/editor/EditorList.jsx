@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import { ReactComponent as Camera } from '../../assets/camera.svg'
 import { styled } from 'styled-components'
 
-function EditorList({ id, onImageChange, onContentChange }) {
+function EditorList({ id, onImageChange, onContentChange, formData, setFormData }) {
     const [image, setImage] = useState(""); // 미리보기로 보여줄 이미지
     const [onDrag, setOnDrag] = useState(false);
     const [paddingBottom, setPaddingBottom] = useState(null);
@@ -32,7 +32,7 @@ function EditorList({ id, onImageChange, onContentChange }) {
             img.onload = () => {
                 setPaddingBottom(img.height / img.width * 100); // 높이를 이미지에 맞게 조절
             }
-            onImageChange(id, reader.result);
+            onImageChange(id, file);
         }
     }
 
@@ -54,7 +54,7 @@ function EditorList({ id, onImageChange, onContentChange }) {
             img.onload = () => {
                 setPaddingBottom((img.height / img.width) * 100);
             }
-            onImageChange(id, reader.result);
+            onImageChange(id, file);
         };
     }
 
@@ -62,7 +62,6 @@ function EditorList({ id, onImageChange, onContentChange }) {
     const handleDrag = (e, isDragging) => {
         e.preventDefault();
         setOnDrag(isDragging);
-        // console.log(onDrag);
     };
 
     // textarea 내용 입력 처리
