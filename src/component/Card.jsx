@@ -17,7 +17,13 @@ const Card = ({ item }) => {
       </CardContainer>
       <UserContainer>
         <UserImage src={item.profileImage === "default" ? userDefault : item.profileImage} />
-        <UserName>{item.nickname}</UserName>
+        <UserName
+          onClick={() => {
+            navigate(`/userInfo/${item.nickname}`);
+          }}
+        >
+          {item.nickname}
+        </UserName>
       </UserContainer>
     </div>
   );
@@ -73,7 +79,7 @@ const ContentContainer = styled.div`
 const UserContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 13px;
+  margin-top: 5px;
   @media screen and (max-width: 768px) {
     margin-top: 0px;
   }
@@ -91,5 +97,6 @@ const UserName = styled.div`
   font-weight: 600;
   line-height: 14px;
   color: rgb(47, 52, 56);
+  cursor: pointer;
 `;
 export default Card;

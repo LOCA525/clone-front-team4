@@ -6,9 +6,7 @@ import { getPostsApi } from "../api/posts";
 
 const MainPage = () => {
   const { isLoading, error, data } = useQuery("mainPageData", getPostsApi);
-  console.log(data);
   if (isLoading) return "Loading...";
-  console.log(error);
   return (
     <MainPageContainer>
       <CardContainer>
