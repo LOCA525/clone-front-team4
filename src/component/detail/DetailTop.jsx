@@ -1,9 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { ReactComponent as Dots } from '../../assets/ellipsis.svg'
 import { styled } from 'styled-components';
+import { deletePostApi } from '../../api/posts';
 
-function DetailTop() {
+function DetailTop({ data }) {
     const [isOpen, setIsOpen] = useState(false);
+    const loginUser = JSON.parse(localStorage.getItem("logInUser"));
+    const isUser = (loginUser) && (data.nickname === loginUser.nickname);
     const dropdownRef = useRef(null);
 
     // 드롭다운 열기
@@ -28,9 +31,16 @@ function DetailTop() {
 
     }
 
-    const handleDeleteButton = () => {
-        if(window.confirm("정말로 삭제하시겠습니까?")) {
-            
+    const handleDeleteButton = async () => {
+        if (window.confirm("정말로 삭제하시겠습니까?")) {
+            try {
+                const res = await deletePostApi(data.postId);
+                if (res.status <= 300) {
+                    console.log("성공", res);
+                };
+            } catch (error) {
+                console.log(error);
+            };
         }
     }
 
@@ -39,19 +49,22 @@ function DetailTop() {
             <StCategory>
                 원룸
             </StCategory>
-            <StEditButtonArea ref={dropdownRef}>
-                <StEditButton aria-label='수정하기,삭제하기 버튼 열기' onClick={toggleDropdown}>
-                    <Dots />
-                </StEditButton>
-                <StDropdownMenu $isOpen={isOpen}>
-                    <StDropdownItem onClick={handleEditButton}>
-                        수정하기
-                    </StDropdownItem>
-                    <StDropdownItem onClick={handleDeleteButton} $color="#FF7777">
-                        삭제하기
-                    </StDropdownItem>
-                </StDropdownMenu>
-            </StEditButtonArea>
+            {isUser && (
+                <StEditButtonArea ref={dropdownRef}>
+                    <StEditButton aria-label='수정하기,삭제하기 버튼 열기' onClick={toggleDropdown}>
+                        <Dots />
+                    </StEditButton>
+                    <StDropdownMenu $isOpen={isOpen}>
+                        <StDropdownItem onClick={handleEditButton}>
+                            수정하기
+                        </StDropdownItem>
+                        <StDropdownItem onClick={handleDeleteButton} $color="#FF7777">
+                            삭제하기
+                        </StDropdownItem>
+                    </StDropdownMenu>
+                </StEditButtonArea>
+
+            )}
         </MainTop>
     )
 }
@@ -70,7 +83,6 @@ const StCategory = styled.div`
     color: #828C94;
     font-size: 16px;
     line-height: 32px;
-    font-family: "OhouseSans", sans-serif;
 `
 
 const StEditButtonArea = styled.div`
@@ -107,7 +119,6 @@ const StDropdownItem = styled.div`
     font-size: 16px;
     font-weight: 500;
     line-height: 20px;
-    font-family: "OhouseSans", sans-serif;
 
     padding: 16px;
     cursor: pointer;

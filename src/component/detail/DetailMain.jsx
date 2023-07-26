@@ -1,34 +1,54 @@
 import React from 'react'
 import { styled } from 'styled-components'
 import Comment from './Comment'
-
 import DetailTop from './DetailTop'
 import DetailProfile from './DetailProfile'
 import DetailSide from './DetailSide'
+import { getDetailPostApi } from '../../api/posts'
+import { useParams } from 'react-router-dom'
+import { useQuery } from 'react-query'
 
 function DetailMain() {
+    const { id } = useParams();
+
+    const { data, isLoading, isError } = useQuery(
+        ["posts", id],
+        async () => {
+            const res = await getDetailPostApi(id);
+            // console.log(res.data.data);
+            console.log(res.data)
+            return res.data.data
+        }
+    );
+
+    if (isLoading) {
+        return <h2>Loading...</h2>
+    }
+
+    if (isError) {
+        return <h2>error...</h2>
+    }
+
     return (
         <TestDiv>
             <DetailWrapper>
                 <MainWrapper>
                     <MainContainer>
-                        <DetailTop />
-                        <MainArticle>
-                            <ArticleImage>
-                                <img src="https://image.ohou.se/i/bucketplace-v2-development/uploads/cards/169019346232271566.jpg?w=720" alt="" />
-                            </ArticleImage>
-                            <ArticleContent>
-                                내용
-                            </ArticleContent>
-                        </MainArticle>
-                        <MainArticle>
-                            <ArticleImage>
-                                <img src="https://image.ohou.se/i/bucketplace-v2-development/uploads/cards/169019346232271566.jpg?w=720" alt="" />
-                            </ArticleImage>
-                            <ArticleContent>
-                                내용
-                            </ArticleContent>
-                        </MainArticle>
+                        <DetailTop data={data} />
+                        {
+                            data.postDetails.map((item) => {
+                                return (
+                                    <MainArticle key={item.postImage}>
+                                        <ArticleImage>
+                                            <ArticleImageSrc src={`${item.postImage}`} alt="" />
+                                        </ArticleImage>
+                                        <ArticleContent>
+                                            {item.content}
+                                        </ArticleContent>
+                                    </MainArticle>
+                                )
+                            })
+                        }
                         <CountSection>
                             <CountDl>
                                 <CountDt>조회</CountDt>
@@ -75,7 +95,7 @@ const MainContainer = styled.div`
 `
 
 const MainArticle = styled.div`
-    
+    margin-bottom: 40px;
 `
 
 const ArticleImage = styled.div`
@@ -84,16 +104,19 @@ const ArticleImage = styled.div`
     height: 100%;
 `
 
+const ArticleImageSrc = styled.img`
+    width: inherit;
+`
+
 const ArticleContent = styled.div`
     position: relative;
 
     color: #2F3438;
     font-size: 16px;
     line-height: 24px;
-    font-family: "OhouseSans", sans-serif;
     white-space: pre-line;
 
-    margin: 40px 0px;
+    margin-top: 40px;
 `
 
 const CountSection = styled.div`
@@ -115,14 +138,12 @@ const CountDl = styled.dl`
 const CountDt = styled.dt`
     display: inline-block;
     font-weight: 500;
-    font-family: "OhouseSans", sans-serif;
     vertical-align: middle;
 `
 
 const CountDd = styled.dd`
     display: inline-block;
     font-weight: 700;
-    font-family: "OhouseSans", sans-serif;
     vertical-align: middle;
     margin: 0px 16px 0px 4px;
 `

@@ -3,10 +3,12 @@ import { styled } from 'styled-components'
 import EditorList from './EditorList';
 import EditorHeader from './EditorHeader';
 import EditorCategory from './EditorCategory';
-import { postPostsApi } from '../../api/posts';
+import { getDetailPostApi, postPostsApi } from '../../api/posts';
+import { useParams } from 'react-router-dom';
 
 function EditorLayout() {
     const [category, setCategory] = useState("");
+    const { id } = useParams();
     const [ready, setReady] = useState(false);
     const [formData, setFormData] = useState(new FormData());
     const [editorList, setEditorList] = useState([
@@ -17,7 +19,17 @@ function EditorLayout() {
         }
     ]);
 
-    // 1. 카테고리 선택하고 2. 모든 이미지가 업로드 됐을 때 올리기 버튼 활성화
+    useEffect(() => {
+        if (id) {
+            const test = async () => {
+                const res = await getDetailPostApi(id);
+                console.log(res.data.data);
+            }
+            test();
+        }
+    })
+
+    // 카테고리 선택하고 모든 이미지가 업로드 됐을 때 올리기 버튼 활성화
     useEffect(() => {
         const editorUploaded = editorList.every(editor => editor.image);
         setReady(!!editorUploaded && !!category);
@@ -68,16 +80,11 @@ function EditorLayout() {
         formData.set("category", category);
         const content = [];
         editorList.forEach((editor) => {
-            if (editor.content) {
-                content.push({ content: editor.content });
-            } else {
-                content.push({ content: "" });
-            }
+            content.push({ content: editor.content });
         });
-        // console.log(content);
         formData.set("content", new Blob([JSON.stringify(content)], { type: "application/json" }));
         formData.set("imageCount", editorList.length);
-
+        // console.log(content);
         // for(let pair of formData.keys()) {
         //     console.log(pair, formData.get(pair));
         // }
