@@ -23,3 +23,5 @@ export const postLoginApi = async (body) => {
   const res = await instance.post("/api/auth/login", body);
   return res;
 };
+
+//회원정보 업데이트
