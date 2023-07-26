@@ -22,14 +22,11 @@ function EditorCategory({ onCategoryChange }) {
             </StDropdownToggle>
             {isOpen && (
                 <StDropdownMenu>
-                    <StDropdownItem onClick={() => handleItemClick('원룸')}>
-                        원룸
+                    <StDropdownItem onClick={() => handleItemClick('집사진')}>
+                        집사진
                     </StDropdownItem>
-                    <StDropdownItem onClick={() => handleItemClick('거실')}>
-                        거실
-                    </StDropdownItem>
-                    <StDropdownItem onClick={() => handleItemClick('침실')}>
-                        침실
+                    <StDropdownItem onClick={() => handleItemClick('취미일상')}>
+                        취미일상
                     </StDropdownItem>
                 </StDropdownMenu>
             )}
