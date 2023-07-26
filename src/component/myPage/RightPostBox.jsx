@@ -2,12 +2,15 @@ import React from 'react'
 import { styled } from 'styled-components'
 import { useNavigate } from 'react-router-dom';
 
-function RightPostBox({$pictureName}) {
+function RightPostBox({$pictureName, $userData}) {
     const navigate = useNavigate();
-    const catImg = "https://i.namu.wiki/i/d1A_wD4kuLHmOOFqJdVlOXVt1TWA9NfNt_HA0CS0Y_N0zayUAX8olMuv7odG2FiDLDQZIRBqbPQwBSArXfEJlQ.webp"
-    const pictureCount = 1;
+    const pictureCount = ($userData?.length === undefined ? 0 : $userData.length);
+    let userDataArray = []
+    if($userData!==undefined){
+        userDataArray= Object.values($userData)
+    }
 
-    // 게시글이 4개이상이면 한 줄 더 추가됨
+    const remainingItems = 4 - (userDataArray.length % 4);
 
   return (
     <StRPBLayout>
@@ -17,13 +20,18 @@ function RightPostBox({$pictureName}) {
         </StRPBTextContainer>
 
         <StRPBPictureContainer>
-            <StRBPictureBox 
-            $imgSrc={catImg}
-            // onClick={() => {navigate('/articlePage/:id')};
-            />
-            <StRBPictureBox/>
-            <StRBPictureBox/>
-            <StRBPictureBox/>
+            {userDataArray.map((item)=>(
+                <StRBPictureBox 
+                key={item.postId}
+                $imgSrc={item.postImage}
+                onClick={()=>{navigate(`/articlePage/${item.postId}`)}}
+                style={{ cursor: 'pointer' }}
+                />
+            ))}
+
+            {Array(remainingItems).fill().map((_, index) => (
+                    <StRBPictureBox key={`empty-${index}`} />
+                ))}
 
         </StRPBPictureContainer>
 
@@ -67,6 +75,8 @@ const StRPBPictureCountBox = styled.div`
 const StRPBPictureContainer = styled.div`
     margin: 0 -10px -20px;
     display: flex;
+    flex-wrap: wrap;
+
 `
 
 const StRBPictureBox = styled.div`
@@ -85,4 +95,5 @@ const StRBPictureBox = styled.div`
     background-image: ${({$imgSrc}) => ($imgSrc ? "url(" + $imgSrc + ")" : "")}; 
     background-size: cover;
     background-position: center;
+
 `

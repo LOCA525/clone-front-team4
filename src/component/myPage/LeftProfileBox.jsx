@@ -1,31 +1,32 @@
 import React from 'react'
 import { styled } from 'styled-components'
+import { ReactComponent as HeartIcon } from '../../assets/heart_outline.svg';
+import userDefaultImage from "../../images/userDefault.png";
 
-function LeftProfileBox({$correctId}) {
-    const catImg = "https://i.namu.wiki/i/d1A_wD4kuLHmOOFqJdVlOXVt1TWA9NfNt_HA0CS0Y_N0zayUAX8olMuv7odG2FiDLDQZIRBqbPQwBSArXfEJlQ.webp"
-    const nickName = "예린 이름인데 긴 텍스트 예시입니다~"
-    const heartImg = <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"><path d="M12 9.229c.234-1.12 1.547-6.229 5.382-6.229 2.22 0 4.618 1.551 4.618 5.003 0 3.907-3.627 8.47-10 12.629-6.373-4.159-10-8.722-10-12.629 0-3.484 2.369-5.005 4.577-5.005 3.923 0 5.145 5.126 5.423 6.231zm-12-1.226c0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-7.962-9.648-9.028-12-3.737-2.338-5.262-12-4.27-12 3.737z"/></svg>
+function LeftProfileBox({$correctId, $userData}) {
+    const userImage = ($userData.userImage === "default" ? userDefaultImage : $userData.userImage)
+    const nickName = $userData.nickname;
+    const introduce = $userData?.introduce;
 
-    const likeCount = 3;
+    const likeCount = ($userData?.likeList===undefined? 0 : $userData?.likeList.length);
 
   return (
     <StLPBLayout>
         <StLPBContainer>
-
             <StImgNameContainer>
-                <StImgBox $imgSrc={catImg}/>
+                <StImgBox $imgSrc={userImage}/>
                 <StNickNameBox>{nickName}</StNickNameBox>
             </StImgNameContainer>
 
             {/* 있으면 생기고, 없으면 사라져야함 */}
             <StOneLineBox>
-                한 줄 입니다~
+                {introduce}
             </StOneLineBox>
 
             {$correctId && (
                 <StIconContainer>
                 <StLikeContainer>
-                    <StLikeBox>{heartImg}</StLikeBox>
+                    <HeartIcon />
                     <StLikeNameBox>좋아요</StLikeNameBox>
                     <StLikeCountBox>{likeCount}</StLikeCountBox>
                 </StLikeContainer>
