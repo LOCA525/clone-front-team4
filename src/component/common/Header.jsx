@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { styled } from "styled-components";
 import logo from "../../images/logo.png";
 import userDefaultImage from "../../images/userDefault.png";
@@ -7,6 +7,32 @@ import { useNavigate } from "react-router-dom";
 const Header = () => {
   const navigate = useNavigate();
   const logInuser = JSON.parse(localStorage.getItem("logInUser"));
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const userImageRef = useRef(null);
+
+  const toggleModal = () => {
+    setIsModalOpen((prevState) => !prevState);
+  };
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/");
+  };
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (userImageRef.current && !userImageRef.current.contains(event.target)) {
+        setIsModalOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, []);
+
   return (
     <HeaderLayout>
       <HeaderContainer>
@@ -35,7 +61,17 @@ const Header = () => {
               </AccountBtn>
             </>
           ) : (
-            <UserImage src={userDefaultImage} />
+            <UserImageWrapper onClick={toggleModal} ref={userImageRef}>
+              <UserImage src={logInuser.userImage === "default" ? userDefaultImage : logInuser.userImage} />
+              {isModalOpen && (
+                <Modal>
+                  <ModalContent>
+                    <ModalItem onClick={() => navigate(`/userInfo/${logInuser.nickname}`)}>마이페이지</ModalItem>
+                    <ModalItem onClick={handleLogout}>로그아웃</ModalItem>
+                  </ModalContent>
+                </Modal>
+              )}
+            </UserImageWrapper>
           )}
           <PostBtnContainer
             onClick={() => {
@@ -100,7 +136,6 @@ const UserImage = styled.img`
   border: 2px solid #ffff;
   border-radius: 30px;
   cursor: pointer;
-
   &:hover {
     border: 2px solid #35c5f0;
   }
@@ -129,5 +164,38 @@ const DownIconImage = styled.img`
   margin-left: 6px;
   width: 19px;
   height: 19px;
+`;
+
+const UserImageWrapper = styled.div`
+  position: relative;
+`;
+
+const Modal = styled.div`
+  position: absolute;
+  left: -50px;
+  width: 150px;
+  background-color: #fff;
+  border: 1px solid rgb(218, 221, 224);
+  border-radius: 6px;
+  box-shadow: rgba(63, 71, 77, 0.2) 0px 4px 10px 0px;
+  z-index: 10;
+`;
+
+const ModalContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+`;
+
+const ModalItem = styled.div`
+  color: rgb(47, 52, 56);
+  line-height: 21px;
+  padding: 10px 14px 11px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f1f1f1;
+  }
 `;
 export default Header;
