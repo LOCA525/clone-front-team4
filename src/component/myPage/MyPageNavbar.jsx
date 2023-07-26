@@ -1,22 +1,25 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { styled } from "styled-components";
-import NavList from "../common/NavList";
 import { useParams } from 'react-router-dom';
+import MyPageNavList from "./MyPageNavList";
 
 function MyPageNavbar() {
-  // const userId = localStorage.get("123")
-  const userId = "1";
   const { id } = useParams();
-  const correctId = (userId === id)
+
+    const logInUserString = localStorage.getItem('logInUser');
+    const logInUser = JSON.parse(logInUserString);
+    const logInNickName = logInUser?.nickname;
+    const correctId = (logInNickName === id);
   
+
   return (
     <>
       <StContainer style={{ height: "51px" }}>
         <StNavContainer>
           <StNav>
-            <NavList path={`/userInfo/${id}`} $correctId={correctId}>프로필</NavList>
+            <MyPageNavList path={`/userInfo/${id}`}>프로필</MyPageNavList>
             {correctId && 
-            (<NavList path={`/userInfo/${id}/Edit`}>회원정보수정</NavList>)}
+            (<MyPageNavList path={`/userInfo/${id}/Edit`}>회원정보수정</MyPageNavList>)}
           </StNav>
         </StNavContainer>
       </StContainer>
@@ -49,3 +52,10 @@ const StNav = styled.nav`
     margin: 0 5px;
   }
 `;
+
+
+
+// const clickNickName = useParams().id;
+// const correctId = (logInNickName === clickNickName);
+
+// console.log("네비게이션바", correctId)
