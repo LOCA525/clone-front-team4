@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 const Header = () => {
   const navigate = useNavigate();
   const logInuser = JSON.parse(localStorage.getItem("logInUser"));
-  console.log(logInuser);
   return (
     <HeaderLayout>
       <HeaderContainer>

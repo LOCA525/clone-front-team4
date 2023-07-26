@@ -1,8 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { styled } from "styled-components";
 import Card from "../component/Card";
+import { getMyPageApi } from "../api/posts";
 
 const MainPage = () => {
+  const getTestData = async () => {
+    try {
+      const res = await getMyPageApi();
+      if (res.status === 200) {
+        console.log(";;", res);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getTestData();
+  }, []);
   return (
     <MainPageContainer>
       <CardContainer>
