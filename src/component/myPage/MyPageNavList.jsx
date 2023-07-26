@@ -7,7 +7,6 @@ function MyPageNavList({ children, path }) {
     const navigate = useNavigate();
     const isCurrent = path === decodeURI(pathname);
 
-    console.log(window.location.href);
     return (
         <StNavList>
             <StP $isCurrent={isCurrent} onClick={() => { navigate(path) }}>

@@ -9,10 +9,14 @@ import Detail from "./pages/Detail";
 import MyPage from "./pages/MyPage";
 import Layout2 from "./component/common/Layout2";
 import MyEditPage from "./pages/MyEditPage"
+import { QueryClient, QueryClientProvider } from "react-query";
 
 function App() {
+  const queryClient = new QueryClient();
+
   return (
     <div className="App">
+      <QueryClientProvider client={queryClient}>
       <Routes>
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -28,6 +32,7 @@ function App() {
         </Route>
       <Route path="/editor/new" element={<Editor />} />
     </Routes>
+    </QueryClientProvider>
     </div >
   );
 }
