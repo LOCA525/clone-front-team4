@@ -40,10 +40,10 @@ const ImageContainer = styled.div`
   width: 100%;
   height: 80%;
   background-repeat: no-repeat;
+  background-size: cover;
   background-position: center;
   background-image: url(${(props) => props.image});
   @media screen and (max-width: 768px) {
-    background-size: cover;
     height: 85%;
   }
 `;
