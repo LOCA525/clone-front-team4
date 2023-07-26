@@ -58,7 +58,7 @@ function DetailMain() {
                             </CountDl>
                         </CountSection>
                         <StHr />
-                        <DetailProfile />
+                        <DetailProfile data={data} />
                         <StHr />
                         <Comment />
                     </MainContainer>

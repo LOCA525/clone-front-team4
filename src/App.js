@@ -28,7 +28,7 @@ function App() {
           </Route>
           <Route element={<Layout2 />}>
             <Route path="/userInfo/:id" element={<MyPage />} />
-            <Route path="/userInfo/:id/Edit" element={<MyEditPage />} />
+            <Route path="/userInfo/:id/edit" element={<MyEditPage />} />
             <Route path="/userInfo/:id" element={<MyPage />} />
           </Route>
           <Route path="/editor/:id" element={<Editor />} />

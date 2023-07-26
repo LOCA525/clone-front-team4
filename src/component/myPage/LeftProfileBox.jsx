@@ -139,11 +139,6 @@ const StLikeContainer = styled.div`
     }
 `
 
-const StLikeBox = styled.div`
-    margin: 0px auto 4px;
-    fill: #424242;
-`
-
 const StLikeNameBox = styled.div`
     font-size: 13px;
 `

@@ -1,7 +1,6 @@
 import React from 'react'
 import { styled } from 'styled-components'
-import MyPageNavbar from '../component/myPage/MyPageNavbar'
-import MyEdit from '../component/myPage/MyEdit'
+import MyEdit from '../component/myPageEdit/MyEdit'
 
 function MyEditPage() {
   return (

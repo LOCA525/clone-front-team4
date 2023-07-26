@@ -137,9 +137,6 @@ const CommentContent = styled.div`
 
     &:hover {
         background-color: #EAEDEF;
-    };
-    &::clicked {
-        border-color: "#35C5F0";
     }
 `
 
