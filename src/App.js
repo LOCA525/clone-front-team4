@@ -24,15 +24,16 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route element={<Layout />}>
             <Route path="/" element={<MainPage />} />
-            <Route path="/articlePage/:id" element={<Detail />} />
+            <Route path="/house" element={<div>집사진</div>} />
+            <Route path="/dailylife" element={<div>취미일상</div>} />
+            <Route path="/detail/:id" element={<Detail />} />
           </Route>
           <Route element={<Layout2 />}>
-            <Route path="/userInfo/:id" element={<MyPage />} />
-            <Route path="/userInfo/:id/edit" element={<MyEditPage />} />
-            <Route path="/userInfo/:id" element={<MyPage />} />
+            <Route path="/userinfo/:id" element={<MyPage />} />
+            <Route path="/userinfo/:id/edit" element={<MyEditPage />} />
           </Route>
-          <Route path="/editor/:id" element={<Editor />} />
           <Route path="/editor/new" element={<Editor />} />
+          <Route path="/editor/:id" element={<Editor />} />
         </Routes>
       </QueryClientProvider>
     </div >

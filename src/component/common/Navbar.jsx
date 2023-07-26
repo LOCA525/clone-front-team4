@@ -10,8 +10,8 @@ function Navbar() {
           <StNav>
             {/* 테스트 리스트*/}
             <NavList path={"/"}>전체</NavList>
-            <NavList path={"/articlePage/1"}>집사진</NavList>
-            <NavList path={"/userinfo/1"}>취미일상</NavList>
+            <NavList path={"/house"}>집사진</NavList>
+            <NavList path={"/dailylife"}>취미일상</NavList>
           </StNav>
         </StNavContainer>
       </StContainer>
