@@ -12,7 +12,7 @@ function Profile() {
 
     const logInUserString = localStorage.getItem('logInUser');
     const logInUser = JSON.parse(logInUserString);
-    const logInNickName = logInUser?.nickname;
+    const logInNickName = logInUser.nickname;
     const correctId = (logInNickName === id);
 
     const { isLoading, isError, data } = useQuery(correctId ? 'myUserDataApi' : 'otherUserDataApi', () => correctId ? getMyUserApi() : getOtherUserApi(id));

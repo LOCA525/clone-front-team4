@@ -1,11 +1,19 @@
 import React, { useState, useRef } from "react";
 import { styled } from "styled-components";
+import userDefaultImage from "../../images/userDefault.png";
+import { putUserUpdate } from "../../api/auth";
+import { useMutation } from 'react-query';
+import { useNavigate } from "react-router-dom";
 
 function MyEdit() {
-  const [nicknameContent, setNicknameContent] = useState("");
-  const [oneLineContent, setOneLineContent] = useState("");
+  const userDataString = localStorage.getItem('logInUser');
+  const userData = JSON.parse(userDataString);
+  const [nicknameContent, setNicknameContent] = useState(userData.nickname);
+  const [oneLineContent, setOneLineContent] = useState(userData?.introduce);
   const [selectedFile, setSelectedFile] = useState(null);
-  const profileImg = "https://i.namu.wiki/i/d1A_wD4kuLHmOOFqJdVlOXVt1TWA9NfNt_HA0CS0Y_N0zayUAX8olMuv7odG2FiDLDQZIRBqbPQwBSArXfEJlQ.webp";
+  const profileImg = (userData.userImage === "default" ? userDefaultImage : userData.userImage);
+  const inputRef = useRef(null);
+  const navigate = useNavigate();
 
   // 입력한 값이 없을 때 에러 메시지 표시 여부를 결정하는 함수
   const isNicknameContentEmpty = nicknameContent.trim().length === 0;
@@ -19,73 +27,113 @@ function MyEdit() {
     inputRef.current.click();
   };
 
-  const inputRef = useRef(null);
+  //api 연결..
+  const mutation = useMutation(putUserUpdate, {
+    onSuccess: (data) => {
+      console.log('요청 성공 - 응답 데이터:', data);
+    },
+    onError: (error) => {
+      console.error('요청 실패:', error);
+    },
+  });
+
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+  
+    if (isNicknameContentEmpty){
+      // 스크롤 올라가기
+      const inputWrapper = document.getElementById("nicknameInputWrapper");
+      const { top } = inputWrapper.getBoundingClientRect();
+      window.scrollTo({
+        top: window.scrollY + top - 400,
+        behavior: "smooth"
+      });
+
+      // focus
+      inputRef.current.focus();
+    }else{
+      const updatedData = {
+          "introduce" : oneLineContent,
+          "nickname" : nicknameContent,
+          "image" : selectedFile
+      };
+
+      try{
+        await mutation.mutateAsync(updatedData);
+        localStorage.clear();
+        navigate("/login");
+      }catch(error){
+        console.error('요청 실패:', error);
+      }
+    }
+  };
 
   return (
-    <StMPELayout>
-      <StMPETitleBox>회원정보수정</StMPETitleBox>
+      <StMPELayout onSubmit={handleSubmit}>
+        <StMPETitleBox>회원정보수정</StMPETitleBox>
 
-      <StMPEInputContainer>
-        <StMPEInputLabelBox>
-          별명
-          <StMPEInputLabelRequireBox>* 필수항목</StMPEInputLabelRequireBox>
-        </StMPEInputLabelBox>
+        <StMPEInputContainer>
+          <StMPEInputLabelBox id="nicknameInputWrapper">
+            별명
+            <StMPEInputLabelRequireBox>* 필수항목</StMPEInputLabelRequireBox>
+          </StMPEInputLabelBox>
 
-        <StMPEInputWrapper>
-          <StMPEInputBox
-            value={nicknameContent}
-            onChange={(e) => setNicknameContent(e.target.value)}
-            hasError={isNicknameContentEmpty} // 에러 메시지 표시 여부에 따라 스타일 변경
-          />
-          {isNicknameContentEmpty && (
-            <StMPEInputErrorBox>필수 입력 항목입니다.</StMPEInputErrorBox>
-          )}
-        </StMPEInputWrapper>
-      </StMPEInputContainer>
-
-      <StMPEInputContainer>
-        <StMPEInputLabelBox>
-          프로필 이미지
-        </StMPEInputLabelBox>
-
-        <StMPEImgWrapper>
-          <StMPEImgInputBox
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            ref={inputRef}
-          />
-          <StMPEImgLabelBox onClick={handleImgClick}>
-            {selectedFile ? (
-              <StMPEImgBox src={URL.createObjectURL(selectedFile)} alt="선택된 이미지" />
-            ) : (
-              <StMPEImgBox src={profileImg} alt="프로필 이미지" />
+          <StMPEInputWrapper>
+            <StMPEInputBox
+              value={nicknameContent}
+              onChange={(e) => setNicknameContent(e.target.value)}
+              hasError={isNicknameContentEmpty} // 에러 메시지 표시 여부에 따라 스타일 변경
+              ref={inputRef}
+            />
+            {isNicknameContentEmpty && (
+              <StMPEInputErrorBox>필수 입력 항목입니다.</StMPEInputErrorBox>
             )}
-          </StMPEImgLabelBox>
-        </StMPEImgWrapper>
-      </StMPEInputContainer>
+          </StMPEInputWrapper>
+        </StMPEInputContainer>
 
-      <StMPEInputContainer>
-        <StMPEInputLabelBox>
-          한줄 소개
-        </StMPEInputLabelBox>
+        <StMPEInputContainer>
+          <StMPEInputLabelBox>
+            프로필 이미지
+          </StMPEInputLabelBox>
 
-        <StMPEInputWrapper>
-          <StMPEInputBox
-            value={oneLineContent}
-            onChange={(e) => setOneLineContent(e.target.value)}
-          />
-        </StMPEInputWrapper>
-      </StMPEInputContainer>
+          <StMPEImgWrapper>
+            <StMPEImgInputBox
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              ref={inputRef}
+            />
+            <StMPEImgLabelBox onClick={handleImgClick}>
+              {selectedFile ? (
+                <StMPEImgBox src={URL.createObjectURL(selectedFile)} alt="프로필 이미지" />
+              ) : (
+                <StMPEImgBox src={profileImg} alt="프로필 이미지" />
+              )}
+            </StMPEImgLabelBox>
+          </StMPEImgWrapper>
+        </StMPEInputContainer>
 
-      <StMPEBtn type="submit">회원정보 수정</StMPEBtn>
-    </StMPELayout>
+        <StMPEInputContainer>
+          <StMPEInputLabelBox>
+            한줄 소개
+          </StMPEInputLabelBox>
+
+          <StMPEInputWrapper>
+            <StMPEInputBox
+              value={oneLineContent}
+              onChange={(e) => setOneLineContent(e.target.value)}
+            />
+          </StMPEInputWrapper>
+        </StMPEInputContainer>
+
+        <StMPEBtn type="submit">회원정보 수정</StMPEBtn>
+      </StMPELayout>
   );
 }
 
 export default MyEdit;
 
-const StMPELayout = styled.div`
+const StMPELayout = styled.form`
   margin: 50px auto;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
   padding: 50px;
@@ -94,7 +142,7 @@ const StMPELayout = styled.div`
 
 //회원정보수정
 
-const StMPETitleBox = styled.form`
+const StMPETitleBox = styled.div`
   align-items: center;
   margin-bottom: 60px;
   font-size: 24px;
