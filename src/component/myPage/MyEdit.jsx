@@ -3,6 +3,7 @@ import { styled } from "styled-components";
 import userDefaultImage from "../../images/userDefault.png";
 import { putUserUpdate } from "../../api/auth";
 import { useMutation } from 'react-query';
+import { useNavigate } from "react-router-dom";
 
 function MyEdit() {
   const userDataString = localStorage.getItem('logInUser');
@@ -12,6 +13,7 @@ function MyEdit() {
   const [selectedFile, setSelectedFile] = useState(null);
   const profileImg = (userData.userImage === "default" ? userDefaultImage : userData.userImage);
   const inputRef = useRef(null);
+  const navigate = useNavigate();
 
   // 입력한 값이 없을 때 에러 메시지 표시 여부를 결정하는 함수
   const isNicknameContentEmpty = nicknameContent.trim().length === 0;
@@ -35,7 +37,7 @@ function MyEdit() {
     },
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
   
     if (isNicknameContentEmpty){
@@ -55,7 +57,14 @@ function MyEdit() {
           "nickname" : nicknameContent,
           "image" : selectedFile
       };
-      mutation.mutate(updatedData);
+
+      try{
+        await mutation.mutateAsync(updatedData);
+        localStorage.clear();
+        navigate("/login");
+      }catch(error){
+        console.error('요청 실패:', error);
+      }
     }
   };
 
