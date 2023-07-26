@@ -1,7 +1,7 @@
 import React from 'react'
 import { styled } from 'styled-components'
 
-function DetailProfile() {
+function DetailProfile({ data }) {
     const displayedAt = (createdAt) => {
         const milliSeconds = new Date() - createdAt
         const seconds = milliSeconds / 1000
@@ -29,7 +29,7 @@ function DetailProfile() {
                     </ProfileImage>
                     <ProfileUser>
                         <ProfileUsername>
-                            작성자
+                            {data.nickname}
                         </ProfileUsername>
                         <PostCreatedAt>
                             작성시간
