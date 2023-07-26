@@ -7,13 +7,39 @@ const instance = axios.create({
 // 인터셉터 리스폰스 토큰 담기
 instance.interceptors.response.use(
   (response) => {
-    if (response.headers.accesstoken && response.headers.authorization) {
+    if (response.headers.accesstoken) {
       localStorage.setItem("accessToken", response.headers.accesstoken);
+    }
+
+    if (response.headers.authorization) {
       localStorage.setItem("refreshToken", response.headers.authorization);
     }
+
     return response;
   },
-  (error) => {
+  async (error) => {
+    const {
+      config,
+      response: { status },
+    } = error;
+    if (status === 401) {
+      if (error.response.data.message === "RefreshToken Redirect") {
+        window.location.replace("/login");
+      } else if (error.response.data.accessValidationError === true) {
+        delete config.headers.accesstoken;
+        try {
+          const res = await axios(config);
+          if (res.status === 200) {
+            localStorage.setItem("accessToken", res.headers.accesstoken);
+            console.log("accesstoken갱신성공!!");
+            return res;
+          }
+        } catch (error) {
+          console.log("토큰리프레시에러", error);
+        }
+      }
+    }
+
     return Promise.reject(error);
   }
 );
