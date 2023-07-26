@@ -174,6 +174,7 @@ const UserImageWrapper = styled.div`
 const Modal = styled.div`
   position: absolute;
   left: -50px;
+  top: 45px;
   width: 150px;
   background-color: #fff;
   border: 1px solid rgb(218, 221, 224);
