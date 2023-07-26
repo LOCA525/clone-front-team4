@@ -9,7 +9,7 @@ const Card = ({ item }) => {
     <div>
       <CardContainer
         onClick={() => {
-          navigate(`/articlePage/${item.postId}`);
+          navigate(`/detail/${item.postId}`);
         }}
       >
         <ImageContainer image={item.postImage} />
@@ -19,7 +19,7 @@ const Card = ({ item }) => {
         <UserImage src={item.profileImage === "default" ? userDefault : item.profileImage} />
         <UserName
           onClick={() => {
-            navigate(`/userInfo/${item.nickname}`);
+            navigate(`/userinfo/${item.nickname}`);
           }}
         >
           {item.nickname}

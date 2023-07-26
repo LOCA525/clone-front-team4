@@ -66,7 +66,7 @@ const Header = () => {
               {isModalOpen && (
                 <Modal>
                   <ModalContent>
-                    <ModalItem onClick={() => navigate(`/userInfo/${logInuser.nickname}`)}>마이페이지</ModalItem>
+                    <ModalItem onClick={() => navigate(`/userinfo/${logInuser.nickname}`)}>마이페이지</ModalItem>
                     <ModalItem onClick={handleLogout}>로그아웃</ModalItem>
                   </ModalContent>
                 </Modal>
