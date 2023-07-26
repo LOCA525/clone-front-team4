@@ -5,6 +5,7 @@ import CommentList from './CommentList';
 function Comment() {
     const [content, setContent] = useState('');
     const [isFocused, setIsFocused] = useState(false);
+    const loginUser = JSON.parse(localStorage.getItem("logInUser"));
     const textareaRef = useRef(null);
 
     const handleTextareaFocus = () => {
@@ -40,7 +41,7 @@ function Comment() {
             <CommentInput>
                 <CommentInputForm>
                     <CommentImage>
-                        <CommentImageSrc url="https://item.kakaocdn.net/do/933cf6891eb4535f365751b55ba15da46fb33a4b4cf43b6605fc7a1e262f0845" />
+                        <CommentImageSrc src=""/>
                     </CommentImage>
                     <CommentContent $focused={isFocused} onClick={handleContentClick}>
                         <CommentContentInput

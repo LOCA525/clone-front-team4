@@ -1,34 +1,20 @@
 import React, { useEffect } from "react";
 import { styled } from "styled-components";
 import Card from "../component/Card";
-import { getMyPageApi } from "../api/posts";
+import { useQuery } from "react-query";
+import { getPostsApi } from "../api/posts";
 
 const MainPage = () => {
-  const getTestData = async () => {
-    try {
-      const res = await getMyPageApi();
-      if (res.status === 200) {
-        console.log(";;", res);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    getTestData();
-  }, []);
+  const { isLoading, error, data } = useQuery("mainPageData", getPostsApi);
+  console.log(data);
+  if (isLoading) return "Loading...";
+  console.log(error);
   return (
     <MainPageContainer>
       <CardContainer>
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+        {data.data.data.map((item) => {
+          return <Card item={item} />;
+        })}
       </CardContainer>
     </MainPageContainer>
   );

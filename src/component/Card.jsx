@@ -1,23 +1,23 @@
 import React from "react";
 import { styled } from "styled-components";
 import userDefault from "../images/userDefault.png";
+import { useNavigate } from "react-router-dom";
 
-const Card = () => {
+const Card = ({ item }) => {
+  const navigate = useNavigate();
   return (
     <div>
-      <CardContainer>
-        <ImageContainer
-          image={
-            "https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202305/12/e53dd2d7-5c8f-42c1-bc2a-2a12157191b1.jpg"
-          }
-        />
-        <ContentContainer>
-          콘ㄴ첸츠~~~~~~~~~@#!#!@#~!#@ㅇㅁㄹㅇㄴㅁㄹㄴㅁㄹㄴㅁㄹㄴㅇ콘ㄴ첸츠~~~~~~~~~@#!#!@#~!#@ㅇㅁㄹㅇㄴㅁㄹㄴㅁㄹㄴㅁㄹㄴㅇ콘ㄴ첸츠~~~~~~~~~@#!#!@#~!#@ㅇㅁㄹㅇㄴㅁㄹㄴㅁㄹㄴㅁㄹㄴㅇ콘ㄴ첸츠~~~~~~~~~@#!#!@#~!#@ㅇㅁㄹㅇㄴㅁㄹㄴㅁㄹㄴㅁㄹㄴㅇ
-        </ContentContainer>
+      <CardContainer
+        onClick={() => {
+          navigate(`/articlePage/${item.postId}`);
+        }}
+      >
+        <ImageContainer image={item.postImage} />
+        <ContentContainer>{item.content} </ContentContainer>
       </CardContainer>
       <UserContainer>
-        <UserImage src={userDefault} />
-        <UserName>유저닉네임</UserName>
+        <UserImage src={item.profileImage === "default" ? userDefault : item.profileImage} />
+        <UserName>{item.nickname}</UserName>
       </UserContainer>
     </div>
   );
