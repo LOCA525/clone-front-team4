@@ -29,17 +29,6 @@ const Card = ({ item }) => {
   );
 };
 
-const CardContainer = styled.div`
-  position: relative;
-  cursor: pointer;
-  width: 100%;
-  padding-bottom: 110%;
-
-  @media screen and (max-width: 768px) {
-    padding-bottom: 170%;
-  }
-`;
-
 const ImageContainer = styled.div`
   border-radius: 6px;
   position: absolute;
@@ -66,6 +55,7 @@ const ContentContainer = styled.div`
   width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-weight: 500;
 
   word-break: break-all;
   font-size: 13px;
@@ -76,13 +66,29 @@ const ContentContainer = styled.div`
   }
 `;
 
-const UserContainer = styled.div`
-  display: flex;
-  align-items: center;
-  margin-top: 5px;
+const CardContainer = styled.div`
+  position: relative;
+  cursor: pointer;
+  width: 100%;
+  padding-bottom: 110%;
+
   @media screen and (max-width: 768px) {
-    margin-top: 0px;
+    padding-bottom: 170%;
   }
+
+  &:hover ${ImageContainer} {
+    background-size: 150%;
+  }
+  &:hover ${ContentContainer} {
+    color: gray;
+  }
+`;
+
+const UserName = styled.div`
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 14px;
+  color: rgb(47, 52, 56);
 `;
 
 const UserImage = styled.img`
@@ -92,11 +98,18 @@ const UserImage = styled.img`
   margin-right: 5px;
 `;
 
-const UserName = styled.div`
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 14px;
-  color: rgb(47, 52, 56);
+const UserContainer = styled.div`
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+  @media screen and (max-width: 768px) {
+    margin-top: 0px;
+  }
+
+  &:hover ${UserName} {
+    color: gray;
+  }
 `;
+
 export default Card;
