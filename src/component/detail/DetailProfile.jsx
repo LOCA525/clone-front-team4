@@ -98,7 +98,6 @@ const ProfileUsername = styled.span`
     font-weight: 700;
     font-size: 16px;
     line-height: 20px;
-    font-family: "OhouseSans", sans-serif;
 `
 
 const PostCreatedAt = styled.span`
@@ -107,7 +106,6 @@ const PostCreatedAt = styled.span`
     color: #828C94;
     font-size: 16px;
     line-height: 20px;
-    font-family: "OhouseSans", sans-serif;
 
     letter-spacing: -0.3px;
     margin-top: 6px;

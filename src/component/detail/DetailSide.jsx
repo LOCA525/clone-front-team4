@@ -6,6 +6,18 @@ import { ReactComponent as Comment } from '../../assets/comment.svg'
 import { ReactComponent as Share } from '../../assets/share.svg'
 
 function DetailSide() {
+    const handleShareButton = () => {
+        const currentURL = window.location.href;
+
+        navigator.clipboard.writeText(currentURL)
+            .then(() => {
+                alert('클립보드에 복사되었습니다.');
+            })
+            .catch((error) => {
+                console.error('복사 실패: ', error);
+            });
+    };
+
     return (
         <>
             <SideWrapper>
@@ -37,7 +49,7 @@ function DetailSide() {
                             </SideButtonSpan>
                         </SideButton>
                         <SideButton>
-                            <SideButtonIcon $gray={true} title="공유">
+                            <SideButtonIcon $gray={true} title="공유" onClick={handleShareButton}>
                                 <Share />
                             </SideButtonIcon>
                             <SideButtonSpan $gray={true}>
@@ -141,14 +153,14 @@ const StHr = styled.hr`
 
 const StHeart = styled(Heart)`
     path{
-        fill: ${({$yours}) => $yours ? "#35C5F0" : "" };
-        stroke: ${({$yours}) => $yours ? "#35C5F0" : "" };
+        fill: ${({ $yours }) => $yours ? "#35C5F0" : ""};
+        stroke: ${({ $yours }) => $yours ? "#35C5F0" : ""};
     }
 `
 
 const StBookmark = styled(Bookmark)`
     path{
-        fill: ${({$yours}) => $yours ? "#35C5F0" : "" };
-        stroke: ${({$yours}) => $yours ? "#35C5F0" : "" };
+        fill: ${({ $yours }) => $yours ? "#35C5F0" : ""};
+        stroke: ${({ $yours }) => $yours ? "#35C5F0" : ""};
     }
 `
