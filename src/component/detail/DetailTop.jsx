@@ -10,6 +10,17 @@ function DetailTop({ data }) {
     const loginUser = JSON.parse(localStorage.getItem("logInUser"));
     const isUser = (loginUser) && (data.nickname === loginUser.nickname);
     const dropdownRef = useRef(null);
+    const [category, setCategory] = useState("");
+
+    useEffect(() => {
+        if(data.category === "house") {
+            setCategory("집사진");
+        } else if (data.category === "dailylife") {
+            setCategory("취미일상")
+        } else {
+            setCategory(data.category)
+        }
+    }, [])
 
     // 드롭다운 열기
     const toggleDropdown = () => {
@@ -52,7 +63,7 @@ function DetailTop({ data }) {
     return (
         <MainTop>
             <StCategory>
-                {data.category}
+                {category}
             </StCategory>
             {isUser && (
                 <StEditButtonArea ref={dropdownRef}>

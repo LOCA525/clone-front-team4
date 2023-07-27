@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { styled } from 'styled-components'
 import Comment from './Comment'
 import DetailTop from './DetailTop'
@@ -14,7 +14,7 @@ function DetailMain() {
     const commentRef = useRef(null);
 
     const { data, isLoading, isError } = useQuery(
-        ["posts"],
+        ["posts", id],
         async () => {
             const res = await getDetailPostApi(id);
             console.log(res.data)

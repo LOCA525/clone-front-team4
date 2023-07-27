@@ -6,8 +6,10 @@ function EditorCategory({ category, onCategoryChange }) {
     const [selectedItem, setSelectedItem] = useState('');
 
     useEffect(() => {
-        if (category) {
-            setSelectedItem(category);
+        if (category === "house") {
+            setSelectedItem("집사진");
+        } else if (category === "house") {
+            setSelectedItem("취미일상");
         }
     }, [category])
 
@@ -18,7 +20,11 @@ function EditorCategory({ category, onCategoryChange }) {
     const handleItemClick = (item) => {
         setSelectedItem(item);
         setIsOpen(false);
-        onCategoryChange(item);
+        if (item === "집사진") {
+            onCategoryChange("house");
+        } else if (item === "취미일상") {
+            onCategoryChange("dailylife");
+        }
     };
 
     return (
