@@ -56,7 +56,7 @@ function DetailMain() {
                                 {/* <CountDt>조회</CountDt>
                                 <CountDd>1</CountDd> */}
                                 <CountDt>댓글</CountDt>
-                                <CountDd>{data?.commnets.length}</CountDd>
+                                <CountDd>{data?.comments.length}</CountDd>
                             </CountDl>
                         </CountSection>
                         <StHr />
