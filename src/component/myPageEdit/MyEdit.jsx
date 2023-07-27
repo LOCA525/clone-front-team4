@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
 import { styled } from "styled-components";
-
 import { putUserUpdate } from "../../api/auth";
 import { useMutation } from 'react-query';
 import { useNavigate } from "react-router-dom";
