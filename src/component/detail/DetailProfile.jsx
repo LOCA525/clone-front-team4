@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { styled } from 'styled-components'
+import userDefaultImage from "../../assets/avatar.png";
 
 function DetailProfile({ data }) {
     const [time, setTime] = useState();
+    
     useEffect(() => {
         const timestamp = new Date(data.createdAt).getTime();
         setTime(timestamp)
@@ -31,7 +33,7 @@ function DetailProfile({ data }) {
             <ProfileSection>
                 <ProfileButton>
                     <ProfileImage>
-                        <ProfileImageSrc src="https://item.kakaocdn.net/do/933cf6891eb4535f365751b55ba15da4339e41ce89b663315d96faecd7cfd11b" />
+                        <ProfileImageSrc src={data.profileImage === "default" ? userDefaultImage : data.profileImage} />
                     </ProfileImage>
                     <ProfileUser>
                         <ProfileUsername>
@@ -74,22 +76,17 @@ const ProfileButton = styled.button`
 
 const ProfileImage = styled.figure`
     display: inline-block;
-    background: url(https://item.kakaocdn.net/do/933cf6891eb4535f365751b55ba15da4339e41ce89b663315d96faecd7cfd11b);
-    background-position-x: 50%;
-    background-position-y: center;
-    background-size: cover;
-    background-repeat: no-repeat;
     border-radius: 50%;
     width: 50px;
+    margin-right: 12px;
     flex-shrink: 0;
     margin: 0px;
 `
 
 const ProfileImageSrc = styled.img`
-    height: 0px;
     display: block;
-    visibility: hidden;
-    padding-top: 100%;
+    height: 100%;
+    width: 100%;
 `
 
 const ProfileUser = styled.div`

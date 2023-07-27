@@ -18,7 +18,18 @@ function EditorList({ postId, onImageChange, onContentChange, editorList, setEdi
         const initialContent = editorList.find(item => item.id === postId)?.content || "";
         setImage(initialImage);
         setContent(initialContent);
+        // const temp = convertURLtoFile(initialImage);
+        // console.log(temp);
     }, [postId]);
+
+    const convertURLtoFile = async (url) => {
+        const response = await fetch(url);
+        const data = await response.blob();
+        const ext = url.split(".").pop(); // url 구조에 맞게 수정할 것
+        const filename = url.split("/").pop(); // url 구조에 맞게 수정할 것
+        const metadata = { type: `image/${ext}` };
+        return new File([data], !filename, metadata);
+    };
 
     // 숨겨진 파일 업로드 input을 클릭하는 역할
     const handleUploadButton = () => {
@@ -54,7 +65,7 @@ function EditorList({ postId, onImageChange, onContentChange, editorList, setEdi
             onImageChange(postId, file);
         };
     }
-    
+
     // 높이를 이미지에 맞게 조절
     useEffect(() => {
         const img = new Image();
@@ -81,7 +92,6 @@ function EditorList({ postId, onImageChange, onContentChange, editorList, setEdi
         handleResizeTextarea();
         setContent(contentRef.current.value);
         onContentChange(postId, contentRef.current.value);
-        // console.log(content);
     }
 
     // 사진 삭제
