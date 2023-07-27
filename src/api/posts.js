@@ -29,3 +29,21 @@ export const updatePostApi = async (postId, body) => {
   const res = await instance.put(`/api/posts/${postId}`, body);
   return res;
 };
+
+// 게시글 좋아요
+export const likePostApi = async (postId) => {
+  const res = await instance.patch(`/api/posts/${postId}/like`);
+  return res;
+};
+
+// 댓글 작성
+export const postCommentsApi = async (postId, body) => {
+  const res = await instance.post(`/api/posts/${postId}/comments`, body);
+  return res;
+};
+
+// 댓글 삭제
+export const deleteCommentsApi = async (postId, commentId) => {
+  const res = await instance.delete(`/api/posts/${postId}/comments/${commentId}`);
+  return res;
+};

@@ -11,8 +11,6 @@ import Layout2 from "./component/common/Layout2";
 import MyEditPage from "./pages/MyEditPage"
 import { QueryClient, QueryClientProvider } from "react-query";
 
-const queryClient = new QueryClient();
-
 function App() {
   const queryClient = new QueryClient();
 

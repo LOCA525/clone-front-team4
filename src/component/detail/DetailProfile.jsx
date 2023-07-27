@@ -1,7 +1,13 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { styled } from 'styled-components'
 
 function DetailProfile({ data }) {
+    const [time, setTime] = useState();
+    useEffect(() => {
+        const timestamp = new Date(data.createdAt).getTime();
+        setTime(timestamp)
+    }, [])
+
     const displayedAt = (createdAt) => {
         const milliSeconds = new Date() - createdAt
         const seconds = milliSeconds / 1000
@@ -32,7 +38,7 @@ function DetailProfile({ data }) {
                             {data.nickname}
                         </ProfileUsername>
                         <PostCreatedAt>
-                            작성시간
+                            {displayedAt(time)}
                         </PostCreatedAt>
                     </ProfileUser>
                 </ProfileButton>
