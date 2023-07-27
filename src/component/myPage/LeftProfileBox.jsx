@@ -34,7 +34,7 @@ function LeftProfileBox({$correctId, $userData}) {
             </StImgNameContainer>
 
             <StOneLineBox>
-                {introduce}
+                {(introduce==="null")?"":introduce}
             </StOneLineBox>
 
             {$correctId && (

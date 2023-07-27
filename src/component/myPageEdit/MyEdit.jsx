@@ -147,7 +147,7 @@ function MyEdit() {
 
           <StMPEInputWrapper>
             <StMPEInputBox
-              value={oneLineContent}
+              value={(oneLineContent==="null" ? "" : oneLineContent)}
               onChange={(e) => setOneLineContent(e.target.value)}
               maxlength  = '40'
             />
