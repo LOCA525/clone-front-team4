@@ -19,7 +19,7 @@ function MyEdit() {
   const { id } = useParams();
 
   useEffect(() => {
-    // nicknameContent가 null일 때 홈페이지로 리다이렉트합니다.
+    // nicknameContent가 null일 때 홈페이지로 리다이렉트
     if ((userDataString === null) || (nicknameContent!==id)) {
       navigate(`/userinfo/${id}`);
     }
