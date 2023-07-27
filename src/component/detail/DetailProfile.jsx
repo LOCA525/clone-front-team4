@@ -10,6 +10,7 @@ function DetailProfile({ data }) {
         setTime(timestamp)
     }, [])
 
+    // 게시물 작성 시간
     const displayedAt = (createdAt) => {
         const milliSeconds = new Date() - createdAt
         const seconds = milliSeconds / 1000

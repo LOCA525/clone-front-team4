@@ -12,6 +12,7 @@ function DetailTop({ data }) {
     const dropdownRef = useRef(null);
     const [category, setCategory] = useState("");
 
+    // 카테고리 영문을 한글로
     useEffect(() => {
         if(data.category === "house") {
             setCategory("집사진");

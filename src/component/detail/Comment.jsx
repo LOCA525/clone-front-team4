@@ -11,30 +11,36 @@ function Comment({ data }) {
     const queryClient = useQueryClient();
     const textareaRef = useRef(null);
 
+    // 댓글 Textarea를 Focus했을 때
     const handleTextareaFocus = () => {
         setIsFocused(true);
     }
 
+    // 댓글 Textarea를 Focus하지 않을 때
     const handleTextareaBlur = () => {
         setIsFocused(false);
     }
 
+    // 댓글 내용 입력
     const handleChange = (event) => {
         handleResizeHeight();
         setContent(event.target.value);
     };
 
+    // 댓글 입력창 높이 조절
     const handleResizeHeight = () => {
         textareaRef.current.style.height = "auto";
         textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
     }
 
+    // 정확히 textarea를 클릭하지 않아도 상자만 클릭하면 textarea에 focus
     const handleContentClick = () => {
         if (textareaRef.current) {
             textareaRef.current.focus();
         }
     };
 
+    // 댓글 입력
     const submitMutation = useMutation((id) => postCommentsApi(id, {comment: content}), {
         onSuccess: (response) => {
             queryClient.invalidateQueries("posts");
@@ -46,20 +52,6 @@ function Comment({ data }) {
         submitMutation.mutate(data.postId);
         setContent("");
     }
-
-    // const deleteMutation = useMutation(deletePost, {
-    //     onSuccess: () => {
-    //         queryClient.invalidateQueries(["boards", boardId]);
-    //     }
-    // })
-
-    // const handleDeleteButtonClick = () => {
-    //     if (window.confirm("정말로 게시글을 삭제하시겠습니까?")) {
-    //         deleteMutation.mutate(id);
-    //         alert("삭제 완료");
-    //         navigate(-1);
-    //     }
-    // };
 
     return (
         <>
@@ -101,7 +93,6 @@ const CommentH1 = styled.h1`
     color: #2F3438;
     font-size: 20px;
     line-height: 28px;
-    font-family: "OhouseSans", sans-serif;
     font-weight: 700;
 
     margin: 20px 0px;
@@ -109,7 +100,6 @@ const CommentH1 = styled.h1`
 
 const CommentSpan = styled.span`
     color: #35C5F0;
-    font-family: "OhouseSans", sans-serif;
     font-weight: 700;
 
     margin-left: 6px;
@@ -165,7 +155,6 @@ const CommentContentInput = styled.textarea`
     color: #2F3438;
     font-size: 16px;
     line-height: 24px;
-    font-family: "OhouseSans", sans-serif;
     
     border: none;
     background: none;
@@ -200,7 +189,6 @@ const CommentButton = styled.button`
     color: ${({ $isnull }) => $isnull ? "#C2C8CC" : "#35C5F0"};
     font-size: 16px;
     line-height: 20px;
-    font-family: "OhouseSans", sans-serif;
     font-weight: 700;
     pointer-events: ${({ $isnull }) => $isnull ? "none" : "auto"};
     cursor: pointer;
