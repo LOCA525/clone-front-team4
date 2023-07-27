@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { styled } from "styled-components";
-import logo from "../images/fullLogo.png";
+import logo from "../assets/fullLogo.png";
 import { useNavigate } from "react-router-dom";
 import { postLoginApi } from "../api/auth";
 const LoginPage = () => {

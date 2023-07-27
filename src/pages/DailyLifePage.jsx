@@ -1,10 +1,11 @@
+import React from "react";
 import { styled } from "styled-components";
 import Card from "../component/common/Card";
 import { useQuery } from "react-query";
-import { getPostsApi } from "../api/posts";
+import { getDailyLifePostsApi } from "../api/posts";
 
-const MainPage = () => {
-  const { isLoading, error, data } = useQuery("mainPageData", getPostsApi);
+const DailyLifePage = () => {
+  const { isLoading, error, data } = useQuery("mainPageData", getDailyLifePostsApi);
   if (isLoading) return "Loading...";
   return (
     <MainPageContainer>
@@ -16,7 +17,6 @@ const MainPage = () => {
     </MainPageContainer>
   );
 };
-
 const MainPageContainer = styled.div`
   max-width: 1256px;
   margin: 0 auto;
@@ -40,4 +40,4 @@ const CardContainer = styled.div`
   }
 `;
 
-export default MainPage;
+export default DailyLifePage;
