@@ -1,17 +1,24 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ReactComponent as Camera } from '../../assets/camera.svg'
 import { ReactComponent as Update } from '../../assets/update.svg'
 import { ReactComponent as Delete } from '../../assets/delete.svg'
 import { styled } from 'styled-components'
 
-function EditorList({ id, onImageChange, onContentChange, editorList, setEditorList }) {
-    const [image, setImage] = useState(""); // 미리보기로 보여줄 이미지
+function EditorList({ postId, onImageChange, onContentChange, editorList, setEditorList }) {
+    const [image, setImage] = useState("");
+    const [content, setContent] = useState("");
     const [onDrag, setOnDrag] = useState(false);
     const [paddingBottom, setPaddingBottom] = useState(null);
 
     const fileInputRef = useRef(null);
     const contentRef = useRef(null);
-    const stContentRef = useRef(null);
+
+    useEffect(() => {
+        const initialImage = editorList.find(item => item.id === postId)?.image || "";
+        const initialContent = editorList.find(item => item.id === postId)?.content || "";
+        setImage(initialImage);
+        setContent(initialContent);
+    }, [postId]);
 
     // 숨겨진 파일 업로드 input을 클릭하는 역할
     const handleUploadButton = () => {
@@ -27,13 +34,8 @@ function EditorList({ id, onImageChange, onContentChange, editorList, setEditorL
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
-            setImage(reader.result); // 미리보기로 보여줄 이미지 업데이트
-            const img = new Image();
-            img.src = reader.result;
-            img.onload = () => {
-                setPaddingBottom(img.height / img.width * 100); // 높이를 이미지에 맞게 조절
-            }
-            onImageChange(id, file);
+            setImage(reader.result);
+            onImageChange(postId, file);
         }
     }
 
@@ -43,21 +45,24 @@ function EditorList({ id, onImageChange, onContentChange, editorList, setEditorL
         setOnDrag(false);
         const file = e.dataTransfer.files[0];
         if (!file) {
-            setImage("");
             return;
         }
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
             setImage(reader.result);
-            const img = new Image();
-            img.src = reader.result;
-            img.onload = () => {
-                setPaddingBottom((img.height / img.width) * 100);
-            }
-            onImageChange(id, file);
+            onImageChange(postId, file);
         };
     }
+    
+    // 높이를 이미지에 맞게 조절
+    useEffect(() => {
+        const img = new Image();
+        img.src = image;
+        img.onload = () => {
+            setPaddingBottom((img.height / img.width) * 100);
+        };
+    }, [image]);
 
     // 사진을 Drag&Drop 할 때 테두리 효과
     const handleDrag = (e, isDragging) => {
@@ -65,25 +70,28 @@ function EditorList({ id, onImageChange, onContentChange, editorList, setEditorL
         setOnDrag(isDragging);
     };
 
+    // textarea 높이 자동 변경
+    const handleResizeTextarea = () => {
+        contentRef.current.style.height = "auto";
+        contentRef.current.style.height = (contentRef.current.scrollHeight + 2) + 'px';
+    }
+
     // textarea 내용 입력 처리
     const handleContentChange = () => {
-        if (contentRef.current) {
-            const newHeight = contentRef.current.scrollHeight + 2;
-            contentRef.current.style.height = `${newHeight}px`;
-            if (stContentRef.current) {
-                stContentRef.current.style.height = `${newHeight}px`;
-            }
-        }
-        onContentChange(id, contentRef.current.value);
+        handleResizeTextarea();
+        setContent(contentRef.current.value);
+        onContentChange(postId, contentRef.current.value);
+        // console.log(content);
     }
 
     // 사진 삭제
     const handleDeleteButton = () => {
-        setEditorList(list => list.filter(item => item.id !== id));
-        onImageChange(id, null);
+        setEditorList(list => list.filter(item => item.id !== postId));
+        onImageChange(postId, null);
         setImage("");
+        setContent("");
         setPaddingBottom(null);
-        onContentChange(id, "");
+        onContentChange(postId, "");
     };
 
     return (
@@ -127,12 +135,12 @@ function EditorList({ id, onImageChange, onContentChange, editorList, setEditorL
                     </StImageAreaItem>
                 </StImageArea>
                 <StContentArea>
-                    <StContent ref={stContentRef}>
+                    <StContent>
                         <StContentInput
                             ref={contentRef}
                             spellCheck="false"
                             placeholder={`어떤 사진인지 짧은 소개로 시작해보세요.`}
-                            // value={content}
+                            value={content}
                             onChange={handleContentChange}
                         />
                     </StContent>
@@ -246,25 +254,28 @@ const StContent = styled.div`
 `
 
 const StContentInput = styled.textarea`
+    display: inline-block;
     position: absolute;
     top: 0px;
     left: 0px;
     width: 100%;
+    
+    color: #424242;
+    font-size: 14px;
+    line-height: 20px;
+    white-space: pre-line;
+    overflow-wrap: break-word;
+    caret-color: #2F3438;
+    
+    border: 1px solid #DADDE0;
+    border-radius: 4px;
     box-sizing: border-box;
+    outline: none;
+    resize: none;
+
     height: auto;
     min-height: 152px;
     padding: 16px;
-    display: inline-block;
-    overflow-wrap: break-word;
-    white-space: pre-line;
-    font-size: 14px;
-    line-height: 20px;
-    border: 1px solid #DADDE0;
-    border-radius: 4px;
-    color: #424242;
-    caret-color: #2F3438;
-    outline: none;
-    resize: none;
     
     &::placeholder {
         color: #C2C8CC;
