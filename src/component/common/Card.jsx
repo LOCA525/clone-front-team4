@@ -1,6 +1,6 @@
 import React from "react";
 import { styled } from "styled-components";
-import userDefault from "../images/userDefault.png";
+import userDefault from "../../assets/avatar.png";
 import { useNavigate } from "react-router-dom";
 
 const Card = ({ item }) => {

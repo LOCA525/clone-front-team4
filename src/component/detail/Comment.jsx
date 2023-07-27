@@ -1,11 +1,13 @@
 import React, { useRef, useState } from 'react'
 import { styled } from 'styled-components'
-import CommentList from './CommentList';
+import { postCommentsApi } from '../../api/posts';
+import { useMutation, useQueryClient } from 'react-query';
 
-function Comment() {
+function Comment({ data }) {
     const [content, setContent] = useState('');
     const [isFocused, setIsFocused] = useState(false);
     const loginUser = JSON.parse(localStorage.getItem("logInUser"));
+    const queryClient = useQueryClient();
     const textareaRef = useRef(null);
 
     const handleTextareaFocus = () => {
@@ -32,16 +34,42 @@ function Comment() {
         }
     };
 
+    const submitMutation = useMutation((id) => postCommentsApi(id, {comment: content}), {
+        onSuccess: (response) => {
+            queryClient.invalidateQueries("posts");
+            console.log(response.data);
+        }
+    })
+
+    const handleSubmitButton = async () => {
+        submitMutation.mutate(data.postId);
+        setContent("");
+    }
+
+    // const deleteMutation = useMutation(deletePost, {
+    //     onSuccess: () => {
+    //         queryClient.invalidateQueries(["boards", boardId]);
+    //     }
+    // })
+
+    // const handleDeleteButtonClick = () => {
+    //     if (window.confirm("정말로 게시글을 삭제하시겠습니까?")) {
+    //         deleteMutation.mutate(id);
+    //         alert("삭제 완료");
+    //         navigate(-1);
+    //     }
+    // };
+
     return (
-        <CommentContainer>
+        <>
             <CommentH1>
                 댓글
-                <CommentSpan>7</CommentSpan>
+                <CommentSpan>{data?.commnets.length}</CommentSpan>
             </CommentH1>
             <CommentInput>
                 <CommentInputForm>
                     <CommentImage>
-                        <CommentImageSrc src=""/>
+                        <CommentImageSrc src="" />
                     </CommentImage>
                     <CommentContent $focused={isFocused} onClick={handleContentClick}>
                         <CommentContentInput
@@ -55,15 +83,14 @@ function Comment() {
                             rows="1"
                         />
                         <CommentButtonArea>
-                            <CommentButton $isnull={!content}>
+                            <CommentButton $isnull={!content} onClick={handleSubmitButton}>
                                 입력
                             </CommentButton>
                         </CommentButtonArea>
                     </CommentContent>
                 </CommentInputForm>
             </CommentInput>
-            <CommentList />
-        </CommentContainer>
+        </>
     )
 }
 

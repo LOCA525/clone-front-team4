@@ -17,6 +17,7 @@ instance.interceptors.response.use(
 
     return response;
   },
+  // accessToken 만료시 refreshToke으로 재발급 처리
   async (error) => {
     const {
       config,

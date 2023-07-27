@@ -1,10 +1,11 @@
+import React from "react";
 import { styled } from "styled-components";
 import Card from "../component/common/Card";
 import { useQuery } from "react-query";
-import { getPostsApi } from "../api/posts";
+import { getHousePostsApi } from "../api/posts";
 
-const MainPage = () => {
-  const { isLoading, error, data } = useQuery("mainPageData", getPostsApi);
+const HousePage = () => {
+  const { isLoading, error, data } = useQuery("mainPageData", getHousePostsApi);
   if (isLoading) return "Loading...";
   return (
     <MainPageContainer>
@@ -40,4 +41,4 @@ const CardContainer = styled.div`
   }
 `;
 
-export default MainPage;
+export default HousePage;

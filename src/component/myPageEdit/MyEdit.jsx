@@ -1,23 +1,32 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { styled } from "styled-components";
 import { putUserUpdate } from "../../api/auth";
 import { useMutation } from 'react-query';
 import { useNavigate } from "react-router-dom";
 import avartar from "../../assets/avatar.png"
+import { useParams } from 'react-router-dom';
 
 function MyEdit() {
-  const userDataString = localStorage.getItem('logInUser');
+  const userDataString = localStorage?.getItem('logInUser');
   const userData = JSON.parse(userDataString);
-  const [nicknameContent, setNicknameContent] = useState(userData.nickname);
+  const [nicknameContent, setNicknameContent] = useState(userData?.nickname);
   const [oneLineContent, setOneLineContent] = useState(userData?.introduce);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [profileImg, setProfileImg] = useState(userData.userImage === "default" ? avartar : userData.userImage);
+  const [profileImg, setProfileImg] = useState(userData?.userImage === "default" ? avartar : userData?.userImage);
   const inputRef = useRef(null);
   const inputTextRef = useRef(null);
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  useEffect(() => {
+    // nicknameContent가 null일 때 홈페이지로 리다이렉트합니다.
+    if ((userDataString === null) || (nicknameContent!==id)) {
+      navigate(`/userinfo/${id}`);
+    }
+  }, [nicknameContent]);
 
   // 입력한 값이 없을 때 에러 메시지 표시 여부를 결정하는 함수
-  const isNicknameContentEmpty = nicknameContent.trim().length === 0;
+  const isNicknameContentEmpty = nicknameContent?.trim().length === 0;
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -37,11 +46,12 @@ function MyEdit() {
 
   //api 연결..
   const mutation = useMutation(putUserUpdate, {
-    onSuccess: (data) => {
-      console.log('요청 성공 - 응답 데이터:', data);
+    onSuccess: () => {
+      localStorage.clear();
+      navigate("/login");
     },
     onError: (error) => {
-      console.error('요청 실패:', error);
+      console.error("요청 실패:", error);
     },
   });
 
@@ -66,13 +76,7 @@ function MyEdit() {
           "image" : (selectedFile === null ? "default" : selectedFile)
       };
 
-      try{
-        await mutation.mutateAsync(updatedData);
-        localStorage.clear();
-        navigate("/login");
-      }catch(error){
-        console.error('요청 실패:', error);
-      }
+      mutation.mutate(updatedData);
     }
   };
 
@@ -90,7 +94,7 @@ function MyEdit() {
             <StMPEInputBox
               value={nicknameContent}
               onChange={(e) => setNicknameContent(e.target.value)}
-              hasError={isNicknameContentEmpty} // 에러 메시지 표시 여부에 따라 스타일 변경
+              $hasError={isNicknameContentEmpty} // 에러 메시지 표시 여부에 따라 스타일 변경
               ref={inputTextRef}
             />
             {isNicknameContentEmpty && (
@@ -194,7 +198,7 @@ const StMPEInputBox = styled.input`
   text-align: left;
   box-sizing: border-box;
 
-  border: 1px solid ${({ hasError }) => (hasError ? "#f77" : "#dbdbdb")};
+  border: 1px solid ${({ $hasError }) => ($hasError ? "#f77" : "#dbdbdb")};
   background-color: #fff;
 
   font-size: inherit;
@@ -202,7 +206,7 @@ const StMPEInputBox = styled.input`
 
   &:focus {
     background-color: #f7f8fa;
-    outline: ${({ hasError }) => (hasError ? "1px solid #f77" : "3px solid #c8ffff")};
+    outline: ${({ $hasError }) => ($hasError ? "1px solid #f77" : "3px solid #c8ffff")};
   }
   &:hover {
     background-color: #f7f8fa;
