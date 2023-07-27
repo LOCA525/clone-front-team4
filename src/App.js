@@ -1,21 +1,42 @@
-import logo from "./logo.svg";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
+import Layout from "./component/common/Layout";
+import Editor from "./pages/Editor";
+import SignUpPage from "./pages/signUpPage";
+import LoginPage from "./pages/LoginPage";
+import MainPage from "./pages/MainPage";
+import Detail from "./pages/Detail";
+import MyPage from "./pages/MyPage";
+import Layout2 from "./component/common/Layout2";
+import MyEditPage from "./pages/MyEditPage"
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient();
 
 function App() {
+  const queryClient = new QueryClient();
+
   return (
     <div className="App">
-      <Routes>
-        <Route path="/singup" element={<div>회원가입페이지</div>} />
-        <Route path="/login" element={<div>로그인페이지</div>} />
-        <Route path="/myPage" element={<div>마이페이지</div>} />
-        <Route path="/userInfo/:id" element={<div>회원정보페이지</div>} />
-
-        <Route path="/mainPage" element={<div>메인페이지</div>} />
-        <Route path="/articlePage/:id" element={<div>게시글상세페이지</div>} />
-        <Route path="/articlePost/:id" element={<div>게시글 작성페이지</div>} />
-      </Routes>
-    </div>
+      <QueryClientProvider client={queryClient}>
+        <Routes>
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route element={<Layout />}>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/house" element={<div>집사진</div>} />
+            <Route path="/dailylife" element={<div>취미일상</div>} />
+            <Route path="/detail/:id" element={<Detail />} />
+          </Route>
+          <Route element={<Layout2 />}>
+            <Route path="/userinfo/:id" element={<MyPage />} />
+            <Route path="/userinfo/:id/edit" element={<MyEditPage />} />
+          </Route>
+          <Route path="/editor/new" element={<Editor />} />
+          <Route path="/editor/:id" element={<Editor />} />
+        </Routes>
+      </QueryClientProvider>
+    </div >
   );
 }
 
