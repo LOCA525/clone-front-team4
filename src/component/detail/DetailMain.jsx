@@ -18,7 +18,6 @@ function DetailMain() {
         ["posts", id],
         async () => {
             const res = await getDetailPostApi(id);
-            console.log(res.data)
             return res.data.data
         }
     );

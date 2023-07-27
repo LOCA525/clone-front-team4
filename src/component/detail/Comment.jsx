@@ -1,90 +1,90 @@
 import React, { useRef, useState } from "react";
-import { styled } from "styled-components";
+import { styled, css } from "styled-components";
 import { postCommentsApi } from "../../api/posts";
 import { useMutation, useQueryClient } from "react-query";
 import userDefaultImage from "../../assets/avatar.png";
 
 function Comment({ data }) {
-  const [content, setContent] = useState("");
-  const [isFocused, setIsFocused] = useState(false);
-  const loginUser = JSON.parse(localStorage.getItem("logInUser"));
-  const queryClient = useQueryClient();
-  const textareaRef = useRef(null);
+    const [content, setContent] = useState("");
+    const [isFocused, setIsFocused] = useState(false);
+    const loginUser = JSON.parse(localStorage.getItem("logInUser"));
+    const queryClient = useQueryClient();
+    const textareaRef = useRef(null);
 
-  // 댓글 Textarea를 Focus했을 때
-  const handleTextareaFocus = () => {
-    setIsFocused(true);
-  };
+    // 댓글 Textarea를 Focus했을 때
+    const handleTextareaFocus = () => {
+        setIsFocused(true);
+    };
 
-  // 댓글 Textarea를 Focus하지 않을 때
-  const handleTextareaBlur = () => {
-    setIsFocused(false);
-  };
+    // 댓글 Textarea를 Focus하지 않을 때
+    const handleTextareaBlur = () => {
+        setIsFocused(false);
+    };
 
-  // 댓글 내용 입력
-  const handleChange = (event) => {
-    handleResizeHeight();
-    setContent(event.target.value);
-  };
+    // 댓글 내용 입력
+    const handleChange = (event) => {
+        handleResizeHeight();
+        setContent(event.target.value);
+    };
 
-  // 댓글 입력창 높이 조절
-  const handleResizeHeight = () => {
-    textareaRef.current.style.height = "auto";
-    textareaRef.current.style.height = textareaRef.current.scrollHeight + "px";
-  };
+    // 댓글 입력창 높이 조절
+    const handleResizeHeight = () => {
+        textareaRef.current.style.height = "auto";
+        textareaRef.current.style.height = textareaRef.current.scrollHeight + "px";
+    };
 
-  // 정확히 textarea를 클릭하지 않아도 상자만 클릭하면 textarea에 focus
-  const handleContentClick = () => {
-    if (textareaRef.current) {
-      textareaRef.current.focus();
-    }
-  };
+    // 정확히 textarea를 클릭하지 않아도 상자만 클릭하면 textarea에 focus
+    const handleContentClick = () => {
+        if (textareaRef.current) {
+            textareaRef.current.focus();
+        }
+    };
 
-  // 댓글 입력
-  const submitMutation = useMutation((id) => postCommentsApi(id, { comment: content }), {
-    onSuccess: (response) => {
-      queryClient.invalidateQueries("posts");
-      console.log(response.data);
-    },
-  });
+    // 댓글 입력
+    const submitMutation = useMutation((id) => postCommentsApi(id, { comment: content }), {
+        onSuccess: (response) => {
+            queryClient.invalidateQueries("posts");
+            console.log(response.data);
+        },
+    });
 
-  const handleSubmitButton = async () => {
-    submitMutation.mutate(data.postId);
-    setContent("");
-  };
+    const handleSubmitButton = async () => {
+        submitMutation.mutate(data.postId);
+        setContent("");
+    };
 
-  return (
-    <>
-      <CommentH1>
-        댓글
-        <CommentSpan>{data?.comments.length}</CommentSpan>
-      </CommentH1>
-      <CommentInput>
-        <CommentInputForm>
-          <CommentImage>
-            <CommentImageSrc src={loginUser?.userImage === "default" ? userDefaultImage : loginUser?.userImage} />
-          </CommentImage>
-          <CommentContent $focused={isFocused} onClick={handleContentClick}>
-            <CommentContentInput
-              ref={textareaRef}
-              spellCheck="false"
-              placeholder="칭찬과 격려의 댓글은 작성자에게 큰 힘이 됩니다:)"
-              value={content}
-              onChange={handleChange}
-              onFocus={handleTextareaFocus}
-              onBlur={handleTextareaBlur}
-              rows="1"
-            />
-            <CommentButtonArea>
-              <CommentButton $isnull={!content} onClick={handleSubmitButton}>
-                입력
-              </CommentButton>
-            </CommentButtonArea>
-          </CommentContent>
-        </CommentInputForm>
-      </CommentInput>
-    </>
-  );
+    return (
+        <>
+            <CommentH1>
+                댓글
+                <CommentSpan>{data?.comments.length}</CommentSpan>
+            </CommentH1>
+            <CommentInput>
+                <CommentInputForm>
+                    <CommentImage>
+                        <CommentImageSrc src={(!loginUser) ? userDefaultImage : (loginUser?.userImage === "default" ? userDefaultImage : loginUser?.userImage)} />
+                    </CommentImage>
+                    <CommentContent $focused={isFocused} onClick={handleContentClick}>
+                        <CommentContentInput
+                            ref={textareaRef}
+                            spellCheck="false"
+                            placeholder="칭찬과 격려의 댓글은 작성자에게 큰 힘이 됩니다:)"
+                            value={content}
+                            onChange={handleChange}
+                            onFocus={handleTextareaFocus}
+                            onBlur={handleTextareaBlur}
+                            rows="1"
+                        />
+                        <CommentButtonArea>
+                            <CommentButton $isnull={!content} $disabled={!loginUser} onClick={handleSubmitButton}>
+                                입력
+                            </CommentButton>
+                        </CommentButtonArea>
+                    </CommentContent>
+                </CommentInputForm>
+            </CommentInput>
+        </>
+    );
 }
 
 export default Comment;
@@ -191,7 +191,7 @@ const CommentButton = styled.button`
   line-height: 20px;
   font-weight: 700;
   pointer-events: ${({ $isnull }) => ($isnull ? "none" : "auto")};
-  cursor: pointer;
+  cursor: ${({ $disabled }) => $disabled ? "not-allowed" : "pointer"};
 
   height: 24px;
   padding: 0px;

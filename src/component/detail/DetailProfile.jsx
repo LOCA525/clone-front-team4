@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { styled } from 'styled-components'
 import userDefaultImage from "../../assets/avatar.png";
+import { useNavigate } from 'react-router';
 
 function DetailProfile({ data }) {
     const [time, setTime] = useState();
+    const navigate = useNavigate();
     
     useEffect(() => {
         const timestamp = new Date(data.createdAt).getTime();
@@ -12,7 +14,7 @@ function DetailProfile({ data }) {
 
     // 게시물 작성 시간
     const displayedAt = (createdAt) => {
-        const milliSeconds = new Date() - createdAt
+        const milliSeconds = new Date() - createdAt;
         const seconds = milliSeconds / 1000
         if (seconds < 60) return `방금 전`
         const minutes = seconds / 60
@@ -29,10 +31,15 @@ function DetailProfile({ data }) {
         return `${Math.floor(years)}년 전`
     }
 
+    // 작성자 프로필 클릭
+    const handleProfileButton = () => {
+        navigate(`/userinfo/${data.nickname}`)
+    }
+
     return (
         <>
             <ProfileSection>
-                <ProfileButton>
+                <ProfileButton onClick={handleProfileButton}>
                     <ProfileImage>
                         <ProfileImageSrc src={data.profileImage === "default" ? userDefaultImage : data.profileImage} />
                     </ProfileImage>
