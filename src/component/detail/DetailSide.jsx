@@ -14,7 +14,7 @@ function DetailSide({ data, commentRef }) {
     // 좋아요
     const LikeMutation = useMutation(likePostApi, {
         onSuccess: (response) => {
-            queryClient.invalidateQueries(["posts", data.postId]);
+            queryClient.invalidateQueries(["posts"]);
             console.log(response.data);
         }
     })

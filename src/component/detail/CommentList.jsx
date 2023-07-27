@@ -4,23 +4,37 @@ import { ReactComponent as Heart } from '../../assets/heart.svg'
 import { ReactComponent as Left } from '../../assets/LeftBracket.svg'
 import { ReactComponent as Right } from '../../assets/RightBracket.svg'
 import { useMutation, useQueryClient } from 'react-query'
-import { deleteCommentsApi } from '../../api/posts'
+import { deleteCommentsApi, likeCommentApi } from '../../api/posts'
 import userDefaultImage from "../../assets/avatar.png";
+import { useNavigate } from 'react-router'
 
 function CommentList({ data }) {
     const loginUser = JSON.parse(localStorage.getItem("logInUser"));
     const queryClient = useQueryClient();
+    const navigate = useNavigate();
 
     // 댓글 삭제
     const deleteMutation = useMutation((id) => deleteCommentsApi(data.postId, id), {
         onSuccess: (response) => {
-            queryClient.invalidateQueries(["posts", data.postId]);
+            queryClient.invalidateQueries(["posts"]);
             console.log(response.data);
         }
     })
 
-    const handleDeleteComment = async () => {
-        deleteMutation.mutate(data.comments.commentId);
+    const handleDeleteComment = async (id) => {
+        deleteMutation.mutate(id);
+    }
+
+    // 댓글 삭제
+    const likeMutation = useMutation((id) => likeCommentApi(data.postId, id), {
+        onSuccess: (response) => {
+            queryClient.invalidateQueries(["posts"]);
+            console.log(response.data);
+        }
+    })
+
+    const handleLikeComment = async (id) => {
+        likeMutation.mutate(id);
     }
 
     // 댓글 작성 시간
@@ -42,22 +56,27 @@ function CommentList({ data }) {
         return `${Math.floor(years)}년 전`
     }
 
+    // 댓글 작성자 클릭
+    const handleProfileButton = (nickname) => {
+        navigate(`/userinfo/${nickname}`);
+    }
+
     return (
         <>
             {
                 data.comments.map((item) => {
-                    // const timestamp = new Date(item.createAt).getTime();
+                    const timestamp = new Date(item.createdAt).getTime();
                     return (
-                        <CommentListItem key={item.nickname}>
+                        <CommentListItem key={item.id}>
                             <CommentItem>
-                                <CommentItemLeft>
+                                <CommentItemLeft onClick={() => handleProfileButton(item.nickname)}>
                                     <CommentUserImage>
                                         <CommentUserImageSrc src={item.userImage === "default" ? userDefaultImage : item.userImage} />
                                     </CommentUserImage>
                                 </CommentItemLeft>
                                 <CommentItemRight>
                                     <CommentTop>
-                                        <CommentUserName>
+                                        <CommentUserName onClick={() => handleProfileButton(item.nickname)}>
                                             {item.nickname}
                                         </CommentUserName>
                                         {
@@ -73,14 +92,13 @@ function CommentList({ data }) {
                                     </CommentContent>
                                     <CommentBottom>
                                         <CommentBottomText>
-                                            {/* {displayedAt(timestamp)} */}
-                                            1초 전
+                                            {displayedAt(timestamp)}
                                         </CommentBottomText>
                                         <CommentBottomItem>
                                             <CommentBottomDot>・</CommentBottomDot>
-                                            <CommentLikeButton>
-                                                <StHeart $yours={true} />
-                                                <CommentSpan>1</CommentSpan>
+                                            <CommentLikeButton onClick={() => handleLikeComment(item.id)}>
+                                                <StHeart $yours={item.like} />
+                                                <CommentSpan>{item.likeCount}</CommentSpan>
                                             </CommentLikeButton>
                                         </CommentBottomItem>
                                         {/* <CommentBottomItem>
@@ -91,7 +109,7 @@ function CommentList({ data }) {
                                             (loginUser && (loginUser.nickname === item.nickname)) && (
                                                 <CommentBottomItem>
                                                     <CommentBottomDot>・</CommentBottomDot>
-                                                    <CommentButton onClick={handleDeleteComment}>삭제</CommentButton>
+                                                    <CommentButton onClick={() => handleDeleteComment(item.id)}>삭제</CommentButton>
                                                 </CommentBottomItem>
                                             )
                                         }

@@ -59,3 +59,9 @@ export const deleteCommentsApi = async (postId, commentId) => {
   const res = await instance.delete(`/api/posts/${postId}/comments/${commentId}`);
   return res;
 };
+
+// 댓글 좋아요
+export const likeCommentApi = async (postId, commentId) => {
+  const res = await instance.post(`/api/posts/${postId}/comments/${commentId}/like`);
+  return res;
+};
