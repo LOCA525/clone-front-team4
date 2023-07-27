@@ -1,90 +1,99 @@
 import React from 'react'
 import { styled } from 'styled-components'
 import { ReactComponent as Heart } from '../../assets/heart.svg'
+import { ReactComponent as Left } from '../../assets/LeftBracket.svg'
+import { ReactComponent as Right } from '../../assets/RightBracket.svg'
+import { useMutation, useQueryClient } from 'react-query'
+import { deleteCommentsApi } from '../../api/posts'
 
-function CommentList() {
+function CommentList({ data }) {
+    const loginUser = JSON.parse(localStorage.getItem("logInUser"));
+    const queryClient = useQueryClient();
+    
+    const deleteMutation = useMutation((id) => deleteCommentsApi(data.postId, id), {
+        onSuccess: (response) => {
+            queryClient.invalidateQueries("posts");
+            console.log(response.data);
+        }
+    })
+
+    const handleDeleteComment = async () => {
+        deleteMutation.mutate(data.comments.commentId);
+    }
+
     return (
         <>
-            <CommentListItem>
-                <CommentItem>
-                    <CommentItemLeft>
-                        <CommentUserImage>
-                            <CommentUserImageSrc src="https://item.kakaocdn.net/do/933cf6891eb4535f365751b55ba15da4339e41ce89b663315d96faecd7cfd11b" />
-                        </CommentUserImage>
-                    </CommentItemLeft>
-                    <CommentItemRight>
-                        <CommentTop>
-                            <CommentUserName>
-                                이름
-                            </CommentUserName>
-                            <CommentNewSpan>
-                                내 댓글
-                            </CommentNewSpan>
-                        </CommentTop>
-                        <CommentContent>
-                            내용
-                        </CommentContent>
-                        <CommentBottom>
-                            <CommentBottomText>1초 전</CommentBottomText>
-                            <CommentBottomItem>
-                                <CommentBottomDot>・</CommentBottomDot>
-                                <CommentLikeButton>
-                                    <StHeart $yours={true}/>
-                                    <CommentSpan>1</CommentSpan>
-                                </CommentLikeButton>
-                            </CommentBottomItem>
-                            <CommentBottomItem>
-                                <CommentBottomDot>・</CommentBottomDot>
-                                <CommentButton>답글 달기</CommentButton>
-                            </CommentBottomItem>
-                            <CommentBottomItem>
-                                <CommentBottomDot>・</CommentBottomDot>
-                                <CommentButton>삭제</CommentButton>
-                            </CommentBottomItem>
-                        </CommentBottom>
-                    </CommentItemRight>
-                </CommentItem>
-            </CommentListItem>
-            <CommentListItem>
-                <CommentItem>
-                    <CommentItemLeft>
-                        <CommentUserImage>
-                            <CommentUserImageSrc src="https://item.kakaocdn.net/do/933cf6891eb4535f365751b55ba15da4339e41ce89b663315d96faecd7cfd11b" />
-                        </CommentUserImage>
-                    </CommentItemLeft>
-                    <CommentItemRight>
-                        <CommentTop>
-                            <CommentUserName>
-                                이름
-                            </CommentUserName>
-                            <CommentNewSpan>
-                                내 댓글
-                            </CommentNewSpan>
-                        </CommentTop>
-                        <CommentContent>
-                            내용
-                        </CommentContent>
-                        <CommentBottom>
-                            <CommentBottomText>1초 전</CommentBottomText>
-                            <CommentBottomItem>
-                                <CommentBottomDot>・</CommentBottomDot>
-                                <CommentLikeButton>
-                                    <StHeart />
-                                    <CommentSpan></CommentSpan>
-                                </CommentLikeButton>
-                            </CommentBottomItem>
-                            <CommentBottomItem>
-                                <CommentBottomDot>・</CommentBottomDot>
-                                <CommentButton>답글 달기</CommentButton>
-                            </CommentBottomItem>
-                            <CommentBottomItem>
-                                <CommentBottomDot>・</CommentBottomDot>
-                                <CommentButton>삭제</CommentButton>
-                            </CommentBottomItem>
-                        </CommentBottom>
-                    </CommentItemRight>
-                </CommentItem>
-            </CommentListItem>
+            {
+                data.commnets.map((item) => {
+                    return (
+                        <CommentListItem>
+                            <CommentItem>
+                                <CommentItemLeft>
+                                    <CommentUserImage>
+                                        <CommentUserImageSrc src="https://item.kakaocdn.net/do/933cf6891eb4535f365751b55ba15da4339e41ce89b663315d96faecd7cfd11b" />
+                                    </CommentUserImage>
+                                </CommentItemLeft>
+                                <CommentItemRight>
+                                    <CommentTop>
+                                        <CommentUserName>
+                                            {item.nickname}
+                                        </CommentUserName>
+                                        {
+                                            (loginUser && (loginUser.nickname === item.nickname)) && (
+                                                <CommentNewSpan>
+                                                    내 댓글
+                                                </CommentNewSpan>
+                                            )
+                                        }
+                                    </CommentTop>
+                                    <CommentContent>
+                                        {item.comment}
+                                    </CommentContent>
+                                    <CommentBottom>
+                                        <CommentBottomText>1초 전</CommentBottomText>
+                                        <CommentBottomItem>
+                                            <CommentBottomDot>・</CommentBottomDot>
+                                            <CommentLikeButton>
+                                                <StHeart $yours={true} />
+                                                <CommentSpan>1</CommentSpan>
+                                            </CommentLikeButton>
+                                        </CommentBottomItem>
+                                        <CommentBottomItem>
+                                            <CommentBottomDot>・</CommentBottomDot>
+                                            <CommentButton>답글 달기</CommentButton>
+                                        </CommentBottomItem>
+                                        {
+                                            (loginUser && (loginUser.nickname === item.nickname)) && (
+                                                <CommentBottomItem>
+                                                    <CommentBottomDot>・</CommentBottomDot>
+                                                    <CommentButton onClick={handleDeleteComment}>삭제</CommentButton>
+                                                </CommentBottomItem>
+                                            )
+                                        }
+                                    </CommentBottom>
+                                </CommentItemRight>
+                            </CommentItem>
+                        </CommentListItem>
+                    )
+                })
+            }
+            <CommentPageSection>
+                <CommentLRButton>
+                    <Left />
+                </CommentLRButton>
+                <CommentPageButton $isNow={true}>
+                    1
+                </CommentPageButton>
+                <CommentPageButton>
+                    2
+                </CommentPageButton>
+                <CommentPageButton>
+                    3
+                </CommentPageButton>
+                <CommentLRButton style={{ marginRight: "0px" }}>
+                    <Right />
+                </CommentLRButton>
+            </CommentPageSection>
         </>
     )
 }
@@ -244,5 +253,56 @@ const CommentButton = styled.div`
 
     &:hover {
         text-decoration: underline;
+    }
+`
+
+const CommentPageSection = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+`
+
+const CommentLRButton = styled.button`
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: "none";
+    
+    box-sizing: border-box;
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+    padding: 0px;
+    border: 1px solid #DADDE0;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #F7F9FA;
+    }
+`
+
+const CommentPageButton = styled.button`
+    display: inline-block;
+    border: none;
+    background: ${({ $isNow }) => $isNow ? "#35C5F0" : "none"};
+    
+    color: ${({ $isNow }) => $isNow ? "#FFFFFF" : "#2F3438"};
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: 500;
+    vertical-align: middle;
+    
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+    padding: 0px;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: ${({ $isNow }) => $isNow ? "#009FCE" : "#F7F9FA"};
     }
 `

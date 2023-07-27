@@ -52,7 +52,7 @@ function DetailTop({ data }) {
     return (
         <MainTop>
             <StCategory>
-                원룸
+                {data.category}
             </StCategory>
             {isUser && (
                 <StEditButtonArea ref={dropdownRef}>
