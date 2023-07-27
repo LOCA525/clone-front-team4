@@ -1,11 +1,42 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { styled } from 'styled-components'
 import { ReactComponent as Heart } from '../../assets/heart.svg'
 import { ReactComponent as Bookmark } from '../../assets/bookmark.svg'
 import { ReactComponent as Comment } from '../../assets/comment.svg'
 import { ReactComponent as Share } from '../../assets/share.svg'
+import { likePostApi } from '../../api/posts'
+import { useMutation, useQueryClient } from 'react-query'
 
-function DetailSide() {
+function DetailSide({ data, commentRef }) {
+    // const [like, setLike] = useState(false);
+    const [bookmark, setBookmark] = useState(false);
+    const queryClient = useQueryClient();
+
+    const LikeMutation = useMutation(likePostApi, {
+        onSuccess: (response) => {
+            queryClient.invalidateQueries("posts");
+            // setLike(data.like)
+            console.log(response.data);
+        }
+    })
+
+    const handleLikeButton = async () => {
+        LikeMutation.mutate(data.postId);
+    }
+
+    const handleBookmarkButton = () => {
+        setBookmark(!bookmark)
+    }
+
+    const handleCommentButton = () => {
+        if (commentRef && commentRef.current) {
+            commentRef.current.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            })
+        }
+    }
+
     const handleShareButton = () => {
         const currentURL = window.location.href;
 
@@ -24,16 +55,16 @@ function DetailSide() {
                 <SideContainer>
                     <SideButtonContainer>
                         <SideButton>
-                            <SideButtonIcon title="좋아요">
-                                <StHeart $yours={true} />
+                            <SideButtonIcon title="좋아요" onClick={handleLikeButton}>
+                                <StHeart $yours={data.like} />
                             </SideButtonIcon>
                             <SideButtonSpan>
-                                1
+                                {data.likeCount}
                             </SideButtonSpan>
                         </SideButton>
                         <SideButton>
-                            <SideButtonIcon title="스크랩">
-                                <StBookmark $yours={true} />
+                            <SideButtonIcon title="스크랩" onClick={handleBookmarkButton}>
+                                <StBookmark $yours={bookmark} />
                             </SideButtonIcon>
                             <SideButtonSpan>
                                 1
@@ -41,11 +72,11 @@ function DetailSide() {
                         </SideButton>
                         <StHr />
                         <SideButton>
-                            <SideButtonIcon $gray={true} title="댓글">
+                            <SideButtonIcon $gray={true} title="댓글" onClick={handleCommentButton}>
                                 <Comment />
                             </SideButtonIcon>
                             <SideButtonSpan $gray={true}>
-                                1
+                                {data?.commnets.length}
                             </SideButtonSpan>
                         </SideButton>
                         <SideButton>

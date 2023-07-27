@@ -46,11 +46,12 @@ function MyEdit() {
 
   //api 연결..
   const mutation = useMutation(putUserUpdate, {
-    onSuccess: (data) => {
-      console.log('요청 성공 - 응답 데이터:', data);
+    onSuccess: () => {
+      localStorage.clear();
+      navigate("/login");
     },
     onError: (error) => {
-      console.error('요청 실패:', error);
+      console.error("요청 실패:", error);
     },
   });
 
@@ -75,13 +76,7 @@ function MyEdit() {
           "image" : (selectedFile === null ? "default" : selectedFile)
       };
 
-      try{
-        await mutation.mutateAsync(updatedData);
-        localStorage.clear();
-        navigate("/login");
-      }catch(error){
-        console.error('요청 실패:', error);
-      }
+      mutation.mutate(updatedData);
     }
   };
 
@@ -99,7 +94,7 @@ function MyEdit() {
             <StMPEInputBox
               value={nicknameContent}
               onChange={(e) => setNicknameContent(e.target.value)}
-              hasError={isNicknameContentEmpty} // 에러 메시지 표시 여부에 따라 스타일 변경
+              $hasError={isNicknameContentEmpty} // 에러 메시지 표시 여부에 따라 스타일 변경
               ref={inputTextRef}
             />
             {isNicknameContentEmpty && (
@@ -203,7 +198,7 @@ const StMPEInputBox = styled.input`
   text-align: left;
   box-sizing: border-box;
 
-  border: 1px solid ${({ hasError }) => (hasError ? "#f77" : "#dbdbdb")};
+  border: 1px solid ${({ $hasError }) => ($hasError ? "#f77" : "#dbdbdb")};
   background-color: #fff;
 
   font-size: inherit;
@@ -211,7 +206,7 @@ const StMPEInputBox = styled.input`
 
   &:focus {
     background-color: #f7f8fa;
-    outline: ${({ hasError }) => (hasError ? "1px solid #f77" : "3px solid #c8ffff")};
+    outline: ${({ $hasError }) => ($hasError ? "1px solid #f77" : "3px solid #c8ffff")};
   }
   &:hover {
     background-color: #f7f8fa;

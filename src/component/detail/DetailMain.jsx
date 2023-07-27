@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { styled } from 'styled-components'
 import Comment from './Comment'
 import DetailTop from './DetailTop'
@@ -7,15 +7,16 @@ import DetailSide from './DetailSide'
 import { getDetailPostApi } from '../../api/posts'
 import { useParams } from 'react-router-dom'
 import { useQuery } from 'react-query'
+import CommentList from './CommentList'
 
 function DetailMain() {
     const { id } = useParams();
+    const commentRef = useRef(null);
 
     const { data, isLoading, isError } = useQuery(
-        ["posts", id],
+        ["posts"],
         async () => {
             const res = await getDetailPostApi(id);
-            // console.log(res.data.data);
             console.log(res.data)
             return res.data.data
         }
@@ -51,19 +52,22 @@ function DetailMain() {
                         }
                         <CountSection>
                             <CountDl>
-                                <CountDt>조회</CountDt>
-                                <CountDd>1</CountDd>
+                                {/* <CountDt>조회</CountDt>
+                                <CountDd>1</CountDd> */}
                                 <CountDt>댓글</CountDt>
-                                <CountDd>6</CountDd>
+                                <CountDd>{data?.commnets.length}</CountDd>
                             </CountDl>
                         </CountSection>
                         <StHr />
                         <DetailProfile data={data} />
-                        <StHr />
-                        <Comment />
+                        <StHr ref={commentRef} />
+                        <CommentContainer>
+                            <Comment data={data} />
+                            <CommentList data={data} />
+                        </CommentContainer>
                     </MainContainer>
                 </MainWrapper >
-                <DetailSide />
+                <DetailSide data={data} commentRef={commentRef} />
             </DetailWrapper>
         </TestDiv >
     )
@@ -154,4 +158,9 @@ const StHr = styled.hr`
     height: 1px;
     border: none;
     background-color: #EAEDEF;
+`
+
+const CommentContainer = styled.div`
+    margin: 48px 0px 40px;
+    padding: 0px;
 `
