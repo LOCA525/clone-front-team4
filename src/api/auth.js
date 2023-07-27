@@ -27,9 +27,14 @@ export const postLoginApi = async (body) => {
 //회원정보 업데이트
 export const putUserUpdate = async(body) => {
   const formData = new FormData();
-  formData.append("introduce", body.introduce);
-  formData.append("nickname", body.nickname);
-  formData.append("image", body.image);
+  if(body.image===null){
+    formData.append("introduce", body.introduce);
+    formData.append("nickname", body.nickname);
+  } else{
+    formData.append("introduce", body.introduce);
+    formData.append("nickname", body.nickname);
+    formData.append("image", body.image);
+  }
 
   const res = await instance.put("/api/auth/update", formData, {
     headers: {
