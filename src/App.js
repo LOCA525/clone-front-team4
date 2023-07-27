@@ -8,8 +8,10 @@ import MainPage from "./pages/MainPage";
 import Detail from "./pages/Detail";
 import MyPage from "./pages/MyPage";
 import Layout2 from "./component/common/Layout2";
-import MyEditPage from "./pages/MyEditPage"
+import MyEditPage from "./pages/MyEditPage";
 import { QueryClient, QueryClientProvider } from "react-query";
+import HousePage from "./pages/HousePage";
+import DailyLifePage from "./pages/DailyLifePage";
 
 function App() {
   const queryClient = new QueryClient();
@@ -22,8 +24,8 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route element={<Layout />}>
             <Route path="/" element={<MainPage />} />
-            <Route path="/house" element={<div>집사진</div>} />
-            <Route path="/dailylife" element={<div>취미일상</div>} />
+            <Route path="/house" element={<HousePage />} />
+            <Route path="/dailylife" element={<DailyLifePage />} />
             <Route path="/detail/:id" element={<Detail />} />
           </Route>
           <Route element={<Layout2 />}>
@@ -34,7 +36,7 @@ function App() {
           <Route path="/editor/:id" element={<Editor />} />
         </Routes>
       </QueryClientProvider>
-    </div >
+    </div>
   );
 }
 

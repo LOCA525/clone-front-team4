@@ -2,11 +2,11 @@ import React from 'react'
 import { styled } from 'styled-components'
 import { ReactComponent as HeartIcon } from '../../assets/heart_outline.svg';
 import { ReactComponent as ShareIcon } from "../../assets/share.svg"
-import userDefaultImage from "../../images/userDefault.png";
 import { useLocation } from "react-router-dom";
+import avartar from "../../assets/avatar.png"
 
 function LeftProfileBox({$correctId, $userData}) {
-    const userImage = ($userData.userImage === "default" ? userDefaultImage : $userData.userImage)
+    const userImage = ($userData.userImage === "default" ? avartar : $userData.userImage)
     const nickName = $userData.nickname;
     const introduce = $userData?.introduce;
     const likeCount = ($userData?.likeList===undefined? 0 : $userData?.likeList.length);

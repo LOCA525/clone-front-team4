@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../images/fullLogo.png";
+import logo from "../assets/fullLogo.png";
 import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
