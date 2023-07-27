@@ -45,7 +45,7 @@ function CommentList({ data }) {
     return (
         <>
             {
-                data.commnets.map((item) => {
+                data.comments.map((item) => {
                     // const timestamp = new Date(item.createAt).getTime();
                     return (
                         <CommentListItem key={item.nickname}>

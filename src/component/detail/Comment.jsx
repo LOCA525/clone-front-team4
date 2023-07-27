@@ -57,7 +57,7 @@ function Comment({ data }) {
         <>
             <CommentH1>
                 댓글
-                <CommentSpan>{data?.commnets.length}</CommentSpan>
+                <CommentSpan>{data?.comments.length}</CommentSpan>
             </CommentH1>
             <CommentInput>
                 <CommentInputForm>
