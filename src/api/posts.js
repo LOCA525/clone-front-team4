@@ -23,3 +23,9 @@ export const deletePostApi = async (postId) => {
   const res = await instance.delete(`/api/posts/${postId}`);
   return res;
 };
+
+// 게시글 수정
+export const updatePostApi = async (postId, body) => {
+  const res = await instance.put(`/api/posts/${postId}`, body);
+  return res;
+};
