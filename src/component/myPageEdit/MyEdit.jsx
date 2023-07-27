@@ -1,23 +1,32 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { styled } from "styled-components";
 import { putUserUpdate } from "../../api/auth";
 import { useMutation } from 'react-query';
 import { useNavigate } from "react-router-dom";
 import avartar from "../../assets/avatar.png"
+import { useParams } from 'react-router-dom';
 
 function MyEdit() {
-  const userDataString = localStorage.getItem('logInUser');
+  const userDataString = localStorage?.getItem('logInUser');
   const userData = JSON.parse(userDataString);
-  const [nicknameContent, setNicknameContent] = useState(userData.nickname);
+  const [nicknameContent, setNicknameContent] = useState(userData?.nickname);
   const [oneLineContent, setOneLineContent] = useState(userData?.introduce);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [profileImg, setProfileImg] = useState(userData.userImage === "default" ? avartar : userData.userImage);
+  const [profileImg, setProfileImg] = useState(userData?.userImage === "default" ? avartar : userData?.userImage);
   const inputRef = useRef(null);
   const inputTextRef = useRef(null);
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  useEffect(() => {
+    // nicknameContent가 null일 때 홈페이지로 리다이렉트합니다.
+    if ((userDataString === null) || (nicknameContent!==id)) {
+      navigate(`/userinfo/${id}`);
+    }
+  }, [nicknameContent]);
 
   // 입력한 값이 없을 때 에러 메시지 표시 여부를 결정하는 함수
-  const isNicknameContentEmpty = nicknameContent.trim().length === 0;
+  const isNicknameContentEmpty = nicknameContent?.trim().length === 0;
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
