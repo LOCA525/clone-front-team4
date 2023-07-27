@@ -1,24 +1,38 @@
 import React from 'react'
 import { styled } from 'styled-components'
 import { ReactComponent as HeartIcon } from '../../assets/heart_outline.svg';
-import userDefaultImage from "../../images/userDefault.png";
+import { ReactComponent as ShareIcon } from "../../assets/share.svg"
+import { useLocation } from "react-router-dom";
+import avartar from "../../assets/avatar.png"
 
 function LeftProfileBox({$correctId, $userData}) {
-    const userImage = ($userData.userImage === "default" ? userDefaultImage : $userData.userImage)
+    const userImage = ($userData.userImage === "default" ? avartar : $userData.userImage)
     const nickName = $userData.nickname;
     const introduce = $userData?.introduce;
-
     const likeCount = ($userData?.likeList===undefined? 0 : $userData?.likeList.length);
+    const location = useLocation();
+    const baseUrl = "http://localhost:3000"
+
+    const handleCopyClipBoard = async(text) => {
+        try {
+            await navigator.clipboard.writeText(text);
+            alert("클립보드에 링크가 복사되었어요.");
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
   return (
     <StLPBLayout>
         <StLPBContainer>
+            <StLPBShareIconBox onClick={()=>handleCopyClipBoard(`${baseUrl}${location.pathname}`)}>
+                <ShareIcon />
+            </StLPBShareIconBox>
             <StImgNameContainer>
                 <StImgBox $imgSrc={userImage}/>
                 <StNickNameBox>{nickName}</StNickNameBox>
             </StImgNameContainer>
 
-            {/* 있으면 생기고, 없으면 사라져야함 */}
             <StOneLineBox>
                 {introduce}
             </StOneLineBox>
@@ -62,6 +76,14 @@ const StLPBContainer = styled.div`
     border-radius: 4px;
     border: 1px solid #dadce0;
     box-shadow: 0 2px 4px 0 rgba(63, 71, 77, .06);
+`
+// 공유버튼
+const StLPBShareIconBox = styled.div`
+    position: absolute;
+    top: 18px;
+    right: 12px;
+
+    cursor: pointer;
 `
 
 // 이미지와 닉네임 부분~

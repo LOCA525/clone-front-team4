@@ -1,22 +1,32 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { styled } from "styled-components";
-import userDefaultImage from "../../images/userDefault.png";
 import { putUserUpdate } from "../../api/auth";
 import { useMutation } from 'react-query';
 import { useNavigate } from "react-router-dom";
+import avartar from "../../assets/avatar.png"
+import { useParams } from 'react-router-dom';
 
 function MyEdit() {
-  const userDataString = localStorage.getItem('logInUser');
+  const userDataString = localStorage?.getItem('logInUser');
   const userData = JSON.parse(userDataString);
-  const [nicknameContent, setNicknameContent] = useState(userData.nickname);
+  const [nicknameContent, setNicknameContent] = useState(userData?.nickname);
   const [oneLineContent, setOneLineContent] = useState(userData?.introduce);
   const [selectedFile, setSelectedFile] = useState(null);
-  const profileImg = (userData.userImage === "default" ? userDefaultImage : userData.userImage);
+  const [profileImg, setProfileImg] = useState(userData?.userImage === "default" ? avartar : userData?.userImage);
   const inputRef = useRef(null);
+  const inputTextRef = useRef(null);
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  useEffect(() => {
+    // nicknameContent가 null일 때 홈페이지로 리다이렉트합니다.
+    if ((userDataString === null) || (nicknameContent!==id)) {
+      navigate(`/userinfo/${id}`);
+    }
+  }, [nicknameContent]);
 
   // 입력한 값이 없을 때 에러 메시지 표시 여부를 결정하는 함수
-  const isNicknameContentEmpty = nicknameContent.trim().length === 0;
+  const isNicknameContentEmpty = nicknameContent?.trim().length === 0;
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -26,6 +36,13 @@ function MyEdit() {
   const handleImgClick = () => {
     inputRef.current.click();
   };
+
+  const handleDeleteImg = () => {
+    setSelectedFile(null);
+    if (profileImg !== avartar) {
+      setProfileImg(avartar);
+    }
+  }
 
   //api 연결..
   const mutation = useMutation(putUserUpdate, {
@@ -50,12 +67,12 @@ function MyEdit() {
       });
 
       // focus
-      inputRef.current.focus();
+      inputTextRef.current.focus();
     }else{
       const updatedData = {
           "introduce" : oneLineContent,
           "nickname" : nicknameContent,
-          "image" : selectedFile
+          "image" : (selectedFile === null ? "default" : selectedFile)
       };
 
       try{
@@ -83,7 +100,7 @@ function MyEdit() {
               value={nicknameContent}
               onChange={(e) => setNicknameContent(e.target.value)}
               hasError={isNicknameContentEmpty} // 에러 메시지 표시 여부에 따라 스타일 변경
-              ref={inputRef}
+              ref={inputTextRef}
             />
             {isNicknameContentEmpty && (
               <StMPEInputErrorBox>필수 입력 항목입니다.</StMPEInputErrorBox>
@@ -97,6 +114,7 @@ function MyEdit() {
           </StMPEInputLabelBox>
 
           <StMPEImgWrapper>
+          <StMPEImgPositionBox>
             <StMPEImgInputBox
               type="file"
               accept="image/*"
@@ -110,6 +128,8 @@ function MyEdit() {
                 <StMPEImgBox src={profileImg} alt="프로필 이미지" />
               )}
             </StMPEImgLabelBox>
+            {(profileImg !== avartar)||(selectedFile !== null) ? <StMPEDeleteBtn type="button" onClick={handleDeleteImg}>삭제</StMPEDeleteBtn> : null}
+            </StMPEImgPositionBox>
           </StMPEImgWrapper>
         </StMPEInputContainer>
 
@@ -207,10 +227,40 @@ const StMPEInputErrorBox = styled.div`
 
 const StMPEImgWrapper = styled.div`
   width: 200px;
-  height: 200px;
+  height: 240px;
   margin: 0 0 10px;
   padding: 20px 0;
 `;
+
+const StMPEImgPositionBox = styled.div`
+  position: relative;
+  height: 100%;
+
+  box-sizing: border-box;
+  border: 1px solid #dbdbdb;
+  background-color: #d8d8d8;
+
+  &:hover {
+    opacity: 0.5;
+    transition: opacity 0.1s;
+  }
+`;
+
+const StMPEDeleteBtn = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  padding: 4px 10px;
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 700;
+  
+  background-color: #35c5f0;
+  color: #fff;
+
+  cursor: pointer;
+`
 
 const StMPEImgInputBox = styled.input`
   display: none;
@@ -219,17 +269,8 @@ const StMPEImgInputBox = styled.input`
 const StMPEImgLabelBox = styled.label`
   width: inherit;
   height: inherit;
-
-  box-sizing: border-box;
-  border: 1px solid #dbdbdb;
-  background-color: #d8d8d8;
   font-size: 0;
   cursor: pointer;
-
-  &:hover {
-    opacity: 0.5;
-    transition: opacity 0.1s;
-  }
 `;
 
 const StMPEImgBox = styled.img`

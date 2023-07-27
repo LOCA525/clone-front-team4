@@ -3,9 +3,10 @@ import { styled } from 'styled-components'
 import EditorList from './EditorList';
 import EditorHeader from './EditorHeader';
 import EditorCategory from './EditorCategory';
-import { getDetailPostApi, postPostsApi } from '../../api/posts';
+import { getDetailPostApi, postPostsApi, updatePostApi } from '../../api/posts';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
+import { v4 as uuidv4 } from 'uuid';
 
 function EditorLayout() {
     const [category, setCategory] = useState("");
@@ -15,26 +16,16 @@ function EditorLayout() {
     const formData = new FormData();
     const [editorList, setEditorList] = useState([
         {
-            id: Date.now(),
+            id: uuidv4(),
             image: "",
             content: ""
         }
     ]);
 
-    useEffect(() => {
-        if (editorList.length === 0) {
-            setEditorList({
-                id: Date.now(),
-                image: "",
-                content: ""
-            })
-        }
-    }, [editorList])
-
     // 사진 추가 버튼 클릭시 새로운 Editor 추가
     const handleAddEditor = () => {
         const newEditor = {
-            id: Date.now(),
+            id: uuidv4(),
             image: "",
             content: ""
         };
@@ -82,19 +73,35 @@ function EditorLayout() {
             formData.append("image", editor.image);
         });
         formData.set("imageCount", editorList.length);
-        for(let pair of formData.keys()) {
-            console.log(pair, formData.get(pair));
-        }
-        console.log(editorList);
         try {
-            const res = await postPostsApi(formData);
-            if (res.status <= 300) {
-                console.log("성공", res);
-                navigate(-1);
-            };
+            if (id) {
+                const res = await updatePostApi(id, formData);
+                if (res.status <= 300) {
+                    console.log("성공", res);
+                    navigate(-1);
+                };
+            } else {
+                const res = await postPostsApi(formData);
+                if (res.status <= 300) {
+                    console.log("성공", res);
+                    navigate(-1);
+                };
+            }
         } catch (error) {
             console.log(error);
         };
+    };
+
+    const getEditorList = (postDetails) => {
+        if (!Array.isArray(postDetails) || postDetails.length === 0) {
+            return;
+        }
+        const newEditorList = postDetails.map((postItem) => ({
+            id: uuidv4(),
+            image: postItem.postImage || "",
+            content: postItem.content || "",
+        }));
+        setEditorList(newEditorList);
     };
 
     // 카테고리 선택하고 모든 이미지가 업로드 됐을 때 올리기 버튼 활성화
@@ -103,26 +110,36 @@ function EditorLayout() {
         setReady(!!editorUploaded && !!category);
     }, [editorList, category]);
 
-    const { data, isLoading, isError } = useQuery(
-        ["posts", id],
-        async () => {
+    // editorList가 없을 때 EditorList 하나 추가
+    useEffect(() => {
+        if (editorList.length === 0) {
+            handleAddEditor();
+        }
+    }, [editorList])
+
+    // useEffect(() => {
+    //     if (id) {
+    //         queryClient.prefetchQuery(["posts", id], async () => {
+    //             const res = await getDetailPostApi(id);
+    //             const temp = res.data.data;
+    //             getEditorList(temp.postDetails);
+    //             return res.data.data;
+    //         });
+    //     }
+    // }, [id]);
+
+    useEffect(() => {
+        async function fetchData() {
             if (id) {
                 const res = await getDetailPostApi(id);
                 const temp = res.data.data;
-                return res.data.data
-            } else {
-                return
+                getEditorList(temp.postDetails);
             }
         }
-    );
+        fetchData();
+    }, [id]);
 
-    if (isLoading) {
-        return <h2>Loading...</h2>
-    }
-
-    if (isError) {
-        return <h2>error...</h2>
-    }
+    console.log(editorList);
 
     return (
         <>
@@ -135,11 +152,12 @@ function EditorLayout() {
                             return (
                                 <StListItem key={item.id}>
                                     <EditorList
-                                        id={item.id}
+                                        postId={item.id}
                                         editorList={editorList}
                                         onImageChange={handleImageChange}
                                         onContentChange={handleContentChange}
                                         setEditorList={setEditorList}
+                                        handleAddEditor={handleAddEditor}
                                     />
                                 </StListItem>
                             )
