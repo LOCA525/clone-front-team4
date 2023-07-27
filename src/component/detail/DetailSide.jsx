@@ -76,7 +76,7 @@ function DetailSide({ data, commentRef }) {
                                 <Comment />
                             </SideButtonIcon>
                             <SideButtonSpan $gray={true}>
-                                {data?.commnets.length}
+                                {data?.comments.length}
                             </SideButtonSpan>
                         </SideButton>
                         <SideButton>
