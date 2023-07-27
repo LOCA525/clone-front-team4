@@ -97,6 +97,7 @@ function MyEdit() {
           </StMPEInputLabelBox>
 
           <StMPEImgWrapper>
+          <StMPEImgPositionBox>
             <StMPEImgInputBox
               type="file"
               accept="image/*"
@@ -110,6 +111,8 @@ function MyEdit() {
                 <StMPEImgBox src={profileImg} alt="프로필 이미지" />
               )}
             </StMPEImgLabelBox>
+            {profileImg !== userDefaultImage ? <StMPEDeleteBtn type="button">삭제</StMPEDeleteBtn> : null}
+            </StMPEImgPositionBox>
           </StMPEImgWrapper>
         </StMPEInputContainer>
 
@@ -207,10 +210,34 @@ const StMPEInputErrorBox = styled.div`
 
 const StMPEImgWrapper = styled.div`
   width: 200px;
-  height: 200px;
+  height: 240px;
   margin: 0 0 10px;
   padding: 20px 0;
 `;
+
+const StMPEImgPositionBox = styled.div`
+  position: relative;
+  height: 100%;
+
+  &:hover {
+    opacity: 0.5;
+    transition: opacity 0.1s;
+  }
+`;
+
+const StMPEDeleteBtn = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  padding: 4px 10px;
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 700;
+  
+  background-color: #35c5f0;
+  color: #fff;
+`
 
 const StMPEImgInputBox = styled.input`
   display: none;
@@ -225,11 +252,6 @@ const StMPEImgLabelBox = styled.label`
   background-color: #d8d8d8;
   font-size: 0;
   cursor: pointer;
-
-  &:hover {
-    opacity: 0.5;
-    transition: opacity 0.1s;
-  }
 `;
 
 const StMPEImgBox = styled.img`
