@@ -1,9 +1,10 @@
 import React, { useState, useRef } from "react";
 import { styled } from "styled-components";
-import userDefaultImage from "../../images/userDefault.png";
+
 import { putUserUpdate } from "../../api/auth";
 import { useMutation } from 'react-query';
 import { useNavigate } from "react-router-dom";
+import avartar from "../../assets/avatar.png"
 
 function MyEdit() {
   const userDataString = localStorage.getItem('logInUser');
@@ -11,8 +12,9 @@ function MyEdit() {
   const [nicknameContent, setNicknameContent] = useState(userData.nickname);
   const [oneLineContent, setOneLineContent] = useState(userData?.introduce);
   const [selectedFile, setSelectedFile] = useState(null);
-  const profileImg = (userData.userImage === "default" ? userDefaultImage : userData.userImage);
+  const [profileImg, setProfileImg] = useState(userData.userImage === "default" ? avartar : userData.userImage);
   const inputRef = useRef(null);
+  const inputTextRef = useRef(null);
   const navigate = useNavigate();
 
   // 입력한 값이 없을 때 에러 메시지 표시 여부를 결정하는 함수
@@ -26,6 +28,13 @@ function MyEdit() {
   const handleImgClick = () => {
     inputRef.current.click();
   };
+
+  const handleDeleteImg = () => {
+    setSelectedFile(null);
+    if (profileImg !== avartar) {
+      setProfileImg(avartar);
+    }
+  }
 
   //api 연결..
   const mutation = useMutation(putUserUpdate, {
@@ -50,12 +59,12 @@ function MyEdit() {
       });
 
       // focus
-      inputRef.current.focus();
+      inputTextRef.current.focus();
     }else{
       const updatedData = {
           "introduce" : oneLineContent,
           "nickname" : nicknameContent,
-          "image" : selectedFile
+          "image" : (selectedFile === null ? "default" : selectedFile)
       };
 
       try{
@@ -83,7 +92,7 @@ function MyEdit() {
               value={nicknameContent}
               onChange={(e) => setNicknameContent(e.target.value)}
               hasError={isNicknameContentEmpty} // 에러 메시지 표시 여부에 따라 스타일 변경
-              ref={inputRef}
+              ref={inputTextRef}
             />
             {isNicknameContentEmpty && (
               <StMPEInputErrorBox>필수 입력 항목입니다.</StMPEInputErrorBox>
@@ -111,7 +120,7 @@ function MyEdit() {
                 <StMPEImgBox src={profileImg} alt="프로필 이미지" />
               )}
             </StMPEImgLabelBox>
-            {profileImg !== userDefaultImage ? <StMPEDeleteBtn type="button">삭제</StMPEDeleteBtn> : null}
+            {(profileImg !== avartar)||(selectedFile !== null) ? <StMPEDeleteBtn type="button" onClick={handleDeleteImg}>삭제</StMPEDeleteBtn> : null}
             </StMPEImgPositionBox>
           </StMPEImgWrapper>
         </StMPEInputContainer>
@@ -219,6 +228,10 @@ const StMPEImgPositionBox = styled.div`
   position: relative;
   height: 100%;
 
+  box-sizing: border-box;
+  border: 1px solid #dbdbdb;
+  background-color: #d8d8d8;
+
   &:hover {
     opacity: 0.5;
     transition: opacity 0.1s;
@@ -237,6 +250,8 @@ const StMPEDeleteBtn = styled.button`
   
   background-color: #35c5f0;
   color: #fff;
+
+  cursor: pointer;
 `
 
 const StMPEImgInputBox = styled.input`
@@ -246,10 +261,6 @@ const StMPEImgInputBox = styled.input`
 const StMPEImgLabelBox = styled.label`
   width: inherit;
   height: inherit;
-
-  box-sizing: border-box;
-  border: 1px solid #dbdbdb;
-  background-color: #d8d8d8;
   font-size: 0;
   cursor: pointer;
 `;
