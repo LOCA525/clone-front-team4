@@ -71,11 +71,20 @@ function MyEdit() {
       // focus
       // inputTextRef.current.focus();
     }else{
-      const updatedData = {
+      let updatedData = null;
+      if(selectedFile !== null){
+        updatedData = {
           "introduce" : oneLineContent,
           "nickname" : nicknameContent,
-          "image" : (selectedFile === null ? "default" : selectedFile)
-      };
+          "image" : (profileImg === "default") ? "default" : selectedFile
+        }
+      } else{
+        updatedData = {
+          "introduce" : oneLineContent,
+          "nickname" : nicknameContent,
+          "image": null
+        }
+      }
 
       mutation.mutate(updatedData);
     }
