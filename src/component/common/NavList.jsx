@@ -6,6 +6,7 @@ function NavList({ children, path }) {
     const pathname = useLocation().pathname;
     const navigate = useNavigate();
     const isCurrent = path === pathname;
+    
     return (
         <StNavList>
             <StP $isCurrent={isCurrent} onClick={() => { navigate(path) }}>

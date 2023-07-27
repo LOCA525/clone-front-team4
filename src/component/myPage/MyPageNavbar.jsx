@@ -17,9 +17,9 @@ function MyPageNavbar() {
       <StContainer style={{ height: "51px" }}>
         <StNavContainer>
           <StNav>
-            <MyPageNavList path={`/userInfo/${id}`}>프로필</MyPageNavList>
+            <MyPageNavList path={`/userinfo/${id}`}>프로필</MyPageNavList>
             {correctId && 
-            (<MyPageNavList path={`/userInfo/${id}/Edit`}>회원정보수정</MyPageNavList>)}
+            (<MyPageNavList path={`/userinfo/${id}/Edit`}>회원정보수정</MyPageNavList>)}
           </StNav>
         </StNavContainer>
       </StContainer>
