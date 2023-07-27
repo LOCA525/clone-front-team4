@@ -117,29 +117,18 @@ function EditorLayout() {
         }
     }, [editorList])
 
-    // useEffect(() => {
-    //     if (id) {
-    //         queryClient.prefetchQuery(["posts", id], async () => {
-    //             const res = await getDetailPostApi(id);
-    //             const temp = res.data.data;
-    //             getEditorList(temp.postDetails);
-    //             return res.data.data;
-    //         });
-    //     }
-    // }, [id]);
-
     useEffect(() => {
         async function fetchData() {
             if (id) {
                 const res = await getDetailPostApi(id);
                 const temp = res.data.data;
                 getEditorList(temp.postDetails);
+                setCategory(temp.category);
+                console.log(temp);
             }
         }
         fetchData();
     }, [id]);
-
-    console.log(editorList);
 
     return (
         <>

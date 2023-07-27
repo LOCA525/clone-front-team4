@@ -8,14 +8,12 @@ import { likePostApi } from '../../api/posts'
 import { useMutation, useQueryClient } from 'react-query'
 
 function DetailSide({ data, commentRef }) {
-    // const [like, setLike] = useState(false);
     const [bookmark, setBookmark] = useState(false);
     const queryClient = useQueryClient();
 
     const LikeMutation = useMutation(likePostApi, {
         onSuccess: (response) => {
-            queryClient.invalidateQueries("posts");
-            // setLike(data.like)
+            queryClient.invalidateQueries(["posts", data.postId]);
             console.log(response.data);
         }
     })
@@ -67,7 +65,7 @@ function DetailSide({ data, commentRef }) {
                                 <StBookmark $yours={bookmark} />
                             </SideButtonIcon>
                             <SideButtonSpan>
-                                1
+                                0
                             </SideButtonSpan>
                         </SideButton>
                         <StHr />
@@ -84,7 +82,7 @@ function DetailSide({ data, commentRef }) {
                                 <Share />
                             </SideButtonIcon>
                             <SideButtonSpan $gray={true}>
-                                1
+                                0
                             </SideButtonSpan>
                         </SideButton>
                     </SideButtonContainer>
