@@ -8,13 +8,13 @@ export const getPostsApi = async () => {
 
 // 집사진 게시글 조회
 export const getDailyLifePostsApi = async () => {
-  const res = await instance.get("/api/posts?category=취미일상");
+  const res = await instance.get("/api/posts?category=dailylife");
   return res;
 };
 
 // 취미일상 게시글 조회
 export const getHousePostsApi = async () => {
-  const res = await instance.get("/api/posts?category=집사진");
+  const res = await instance.get("/api/posts?category=house");
   return res;
 };
 

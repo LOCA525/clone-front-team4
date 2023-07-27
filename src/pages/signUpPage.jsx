@@ -13,7 +13,6 @@ const SignUpPage = () => {
     handleSubmit,
     getValues,
   } = useForm({ mode: "onBlur" });
-
   return (
     <SignUpPageContainer>
       <LogoImage
