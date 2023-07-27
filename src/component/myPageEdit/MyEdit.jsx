@@ -23,10 +23,11 @@ function MyEdit() {
     if ((userDataString === null) || (nicknameContent!==id)) {
       navigate(`/userinfo/${id}`);
     }
-  }, [nicknameContent]);
+  }, []);
 
   // 입력한 값이 없을 때 에러 메시지 표시 여부를 결정하는 함수
-  const isNicknameContentEmpty = nicknameContent?.trim().length === 0;
+  const nicknameLength = nicknameContent?.trim().length;
+  const isNicknameContentError = (nicknameLength === 0)||(nicknameLength < 2)||(nicknameLength > 15);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -58,7 +59,7 @@ function MyEdit() {
   const handleSubmit = async(e) => {
     e.preventDefault();
   
-    if (isNicknameContentEmpty){
+    if (isNicknameContentError){
       // 스크롤 올라가기
       const inputWrapper = document.getElementById("nicknameInputWrapper");
       const { top } = inputWrapper.getBoundingClientRect();
@@ -68,7 +69,7 @@ function MyEdit() {
       });
 
       // focus
-      inputTextRef.current.focus();
+      // inputTextRef.current.focus();
     }else{
       const updatedData = {
           "introduce" : oneLineContent,
@@ -94,11 +95,13 @@ function MyEdit() {
             <StMPEInputBox
               value={nicknameContent}
               onChange={(e) => setNicknameContent(e.target.value)}
-              $hasError={isNicknameContentEmpty} // 에러 메시지 표시 여부에 따라 스타일 변경
+              $hasError={isNicknameContentError} // 에러 메시지 표시 여부에 따라 스타일 변경
               ref={inputTextRef}
+              maxLength={15}
+              placeholder="2~15자로 적어주세요"
             />
-            {isNicknameContentEmpty && (
-              <StMPEInputErrorBox>필수 입력 항목입니다.</StMPEInputErrorBox>
+            {isNicknameContentError && (
+              <StMPEInputErrorBox>{ nicknameLength === 0 ? "필수 입력 항목입니다." : "2~15자로 입력해주세요"}</StMPEInputErrorBox>
             )}
           </StMPEInputWrapper>
         </StMPEInputContainer>
@@ -137,6 +140,7 @@ function MyEdit() {
             <StMPEInputBox
               value={oneLineContent}
               onChange={(e) => setOneLineContent(e.target.value)}
+              maxlength  = '40'
             />
           </StMPEInputWrapper>
         </StMPEInputContainer>
