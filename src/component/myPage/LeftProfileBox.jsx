@@ -11,7 +11,7 @@ function LeftProfileBox({$correctId, $userData}) {
     const introduce = $userData?.introduce;
     const likeCount = ($userData?.likeList===undefined? 0 : $userData?.likeList.length);
     const location = useLocation();
-    const baseUrl = "http://localhost:3000"
+    const baseUrl = "https://willowy-froyo-ad779d.netlify.app"
 
     const handleCopyClipBoard = async(text) => {
         try {
