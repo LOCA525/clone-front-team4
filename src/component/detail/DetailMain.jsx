@@ -13,6 +13,7 @@ function DetailMain() {
     const { id } = useParams();
     const commentRef = useRef(null);
 
+    // 게시물 상세조회
     const { data, isLoading, isError } = useQuery(
         ["posts", id],
         async () => {
@@ -31,8 +32,8 @@ function DetailMain() {
     }
 
     return (
-        <TestDiv>
-            <DetailWrapper>
+        <DetailWrapper>
+            <DetailContainer>
                 <MainWrapper>
                     <MainContainer>
                         <DetailTop data={data} />
@@ -68,21 +69,21 @@ function DetailMain() {
                     </MainContainer>
                 </MainWrapper >
                 <DetailSide data={data} commentRef={commentRef} />
-            </DetailWrapper>
-        </TestDiv >
+            </DetailContainer>
+        </DetailWrapper >
     )
 }
 
 export default DetailMain
 
-const TestDiv = styled.div`
+const DetailWrapper = styled.div`
     position: relative;
     max-width: 1256px;
     margin: 0 auto;
     padding: 0 60px;
 `
 
-const DetailWrapper = styled.div`
+const DetailContainer = styled.div`
     position: relative;
 `
 

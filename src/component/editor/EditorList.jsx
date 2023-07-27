@@ -13,6 +13,7 @@ function EditorList({ postId, onImageChange, onContentChange, editorList, setEdi
     const fileInputRef = useRef(null);
     const contentRef = useRef(null);
 
+    // 수정일 때 기존 사진, 내용을 editorList에 넣기
     useEffect(() => {
         const initialImage = editorList.find(item => item.id === postId)?.image || "";
         const initialContent = editorList.find(item => item.id === postId)?.content || "";

@@ -5,6 +5,7 @@ function EditorCategory({ category, onCategoryChange }) {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState('');
 
+    // 수정일 때 기존의 카테고리를 선택
     useEffect(() => {
         if (category === "house") {
             setSelectedItem("집사진");
@@ -13,10 +14,12 @@ function EditorCategory({ category, onCategoryChange }) {
         }
     }, [category])
 
+    // 카테고리 드롭다운 토글
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
     };
 
+    // 카테고리 선택
     const handleItemClick = (item) => {
         setSelectedItem(item);
         setIsOpen(false);
