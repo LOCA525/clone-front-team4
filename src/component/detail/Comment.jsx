@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react'
 import { styled } from 'styled-components'
 import { postCommentsApi } from '../../api/posts';
 import { useMutation, useQueryClient } from 'react-query';
+import userDefaultImage from "../../assets/avatar.png";
 
 function Comment({ data }) {
     const [content, setContent] = useState('');
@@ -69,7 +70,7 @@ function Comment({ data }) {
             <CommentInput>
                 <CommentInputForm>
                     <CommentImage>
-                        <CommentImageSrc src="" />
+                        <CommentImageSrc src={loginUser.userImage === "default" ? userDefaultImage : loginUser.userImage} />
                     </CommentImage>
                     <CommentContent $focused={isFocused} onClick={handleContentClick}>
                         <CommentContentInput
@@ -95,11 +96,6 @@ function Comment({ data }) {
 }
 
 export default Comment
-
-const CommentContainer = styled.div`
-    margin: 48px 0px 40px;
-    padding: 0px;
-`
 
 const CommentH1 = styled.h1`
     color: #2F3438;
@@ -132,11 +128,6 @@ const CommentInputForm = styled.div`
 
 const CommentImage = styled.figure`
     display: inline-block;
-    background: url(https://item.kakaocdn.net/do/933cf6891eb4535f365751b55ba15da46fb33a4b4cf43b6605fc7a1e262f0845);
-    background-position-x: 50%;
-    background-position-y: center;
-    background-size: cover;
-    background-repeat: no-repeat;
     border-radius: 50%;
     width: 30px;
     margin-right: 12px;
@@ -146,9 +137,8 @@ const CommentImage = styled.figure`
 
 const CommentImageSrc = styled.img`
     display: block;
-    visibility: hidden;
-    height: 0px;
-    padding-top: 100%;
+    height: 100%;
+    width: 100%;
 `
 
 const CommentContent = styled.div`

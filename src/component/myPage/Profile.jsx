@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import LeftProfileBox from "./LeftProfileBox";
 import { styled } from "styled-components";
 import RightPostBox from "./RightPostBox";

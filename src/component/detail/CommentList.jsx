@@ -5,14 +5,15 @@ import { ReactComponent as Left } from '../../assets/LeftBracket.svg'
 import { ReactComponent as Right } from '../../assets/RightBracket.svg'
 import { useMutation, useQueryClient } from 'react-query'
 import { deleteCommentsApi } from '../../api/posts'
+import userDefaultImage from "../../assets/avatar.png";
 
 function CommentList({ data }) {
     const loginUser = JSON.parse(localStorage.getItem("logInUser"));
     const queryClient = useQueryClient();
-    
+
     const deleteMutation = useMutation((id) => deleteCommentsApi(data.postId, id), {
         onSuccess: (response) => {
-            queryClient.invalidateQueries("posts");
+            queryClient.invalidateQueries(["posts", data.postId]);
             console.log(response.data);
         }
     })
@@ -21,16 +22,35 @@ function CommentList({ data }) {
         deleteMutation.mutate(data.comments.commentId);
     }
 
+    const displayedAt = (createdAt) => {
+        const milliSeconds = new Date() - createdAt
+        const seconds = milliSeconds / 1000
+        if (seconds < 60) return `방금 전`
+        const minutes = seconds / 60
+        if (minutes < 60) return `${Math.floor(minutes)}분 전`
+        const hours = minutes / 60
+        if (hours < 24) return `${Math.floor(hours)}시간 전`
+        const days = hours / 24
+        if (days < 7) return `${Math.floor(days)}일 전`
+        const weeks = days / 7
+        if (weeks < 5) return `${Math.floor(weeks)}주 전`
+        const months = days / 30
+        if (months < 12) return `${Math.floor(months)}개월 전`
+        const years = days / 365
+        return `${Math.floor(years)}년 전`
+    }
+
     return (
         <>
             {
                 data.commnets.map((item) => {
+                    // const timestamp = new Date(item.createAt).getTime();
                     return (
-                        <CommentListItem>
+                        <CommentListItem key={item.nickname}>
                             <CommentItem>
                                 <CommentItemLeft>
                                     <CommentUserImage>
-                                        <CommentUserImageSrc src="https://item.kakaocdn.net/do/933cf6891eb4535f365751b55ba15da4339e41ce89b663315d96faecd7cfd11b" />
+                                        <CommentUserImageSrc src={item.userImage === "default" ? userDefaultImage : item.userImage} />
                                     </CommentUserImage>
                                 </CommentItemLeft>
                                 <CommentItemRight>
@@ -50,7 +70,10 @@ function CommentList({ data }) {
                                         {item.comment}
                                     </CommentContent>
                                     <CommentBottom>
-                                        <CommentBottomText>1초 전</CommentBottomText>
+                                        <CommentBottomText>
+                                            {/* {displayedAt(timestamp)} */}
+                                            1초 전
+                                        </CommentBottomText>
                                         <CommentBottomItem>
                                             <CommentBottomDot>・</CommentBottomDot>
                                             <CommentLikeButton>
@@ -116,21 +139,15 @@ const CommentItemLeft = styled.div`
 
 const CommentUserImage = styled.figure`
     display: inline-block;
-    background: url(https://item.kakaocdn.net/do/933cf6891eb4535f365751b55ba15da4339e41ce89b663315d96faecd7cfd11b);
-    background-position-x: 50%;
-    background-position-y: center;
-    background-size: cover;
-    background-repeat: no-repeat;
     border-radius: 50%;
     width: 30px;
     margin-right: 12px;
 `
 
 const CommentUserImageSrc = styled.img`
-    height: 0px;
     display: block;
-    visibility: hidden;
-    padding-top: 100%;
+    height: 100%;
+    width: 100%;
 `
 
 const CommentItemRight = styled.div`
