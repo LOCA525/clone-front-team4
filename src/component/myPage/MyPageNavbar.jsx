@@ -6,10 +6,10 @@ import MyPageNavList from "./MyPageNavList";
 function MyPageNavbar() {
   const { id } = useParams();
 
-    const logInUserString = localStorage.getItem('logInUser');
-    const logInUser = JSON.parse(logInUserString);
-    const logInNickName = logInUser?.nickname;
-    const correctId = (logInNickName === id);
+  const logInUserString = localStorage.getItem('logInUser');
+  const logInUser = JSON.parse(logInUserString);
+  const logInNickName = logInUser?.nickname;
+  const correctId = (logInNickName === id);
   
 
   return (
