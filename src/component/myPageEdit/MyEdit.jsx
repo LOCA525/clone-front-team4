@@ -46,11 +46,12 @@ function MyEdit() {
 
   //api 연결..
   const mutation = useMutation(putUserUpdate, {
-    onSuccess: (data) => {
-      console.log('요청 성공 - 응답 데이터:', data);
+    onSuccess: () => {
+      localStorage.clear();
+      navigate("/login");
     },
     onError: (error) => {
-      console.error('요청 실패:', error);
+      console.error("요청 실패:", error);
     },
   });
 
@@ -75,13 +76,7 @@ function MyEdit() {
           "image" : (selectedFile === null ? "default" : selectedFile)
       };
 
-      try{
-        await mutation.mutateAsync(updatedData);
-        localStorage.clear();
-        navigate("/login");
-      }catch(error){
-        console.error('요청 실패:', error);
-      }
+      mutation.mutate(updatedData);
     }
   };
 
