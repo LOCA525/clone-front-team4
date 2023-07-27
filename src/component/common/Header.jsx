@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { styled } from "styled-components";
-import logo from "../../images/logo.png";
-import userDefaultImage from "../../images/userDefault.png";
-import chevronDownIcon from "../../images/downIcon.png";
+import logo from "../../assets/logo.png";
+import userDefaultImage from "../../assets/avatar.png";
+import chevronDownIcon from "../../assets/downIcon.png";
 import { useNavigate } from "react-router-dom";
 const Header = () => {
   const navigate = useNavigate();
