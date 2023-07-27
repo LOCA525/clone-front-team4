@@ -11,6 +11,7 @@ function DetailSide({ data, commentRef }) {
     const [bookmark, setBookmark] = useState(false);
     const queryClient = useQueryClient();
 
+    // 좋아요
     const LikeMutation = useMutation(likePostApi, {
         onSuccess: (response) => {
             queryClient.invalidateQueries(["posts", data.postId]);
@@ -22,10 +23,12 @@ function DetailSide({ data, commentRef }) {
         LikeMutation.mutate(data.postId);
     }
 
+    // 북마크 (구현X)
     const handleBookmarkButton = () => {
         setBookmark(!bookmark)
     }
 
+    // 댓글로 이동
     const handleCommentButton = () => {
         if (commentRef && commentRef.current) {
             commentRef.current.scrollIntoView({
@@ -35,16 +38,15 @@ function DetailSide({ data, commentRef }) {
         }
     }
 
+    // 공유 (링크 복사)
     const handleShareButton = () => {
         const currentURL = window.location.href;
 
-        navigator.clipboard.writeText(currentURL)
-            .then(() => {
-                alert('클립보드에 복사되었습니다.');
-            })
-            .catch((error) => {
-                console.error('복사 실패: ', error);
-            });
+        navigator.clipboard.writeText(currentURL).then(() => {
+            alert('클립보드에 복사되었습니다.');
+        }).catch((error) => {
+            console.error('복사 실패: ', error);
+        });
     };
 
     return (

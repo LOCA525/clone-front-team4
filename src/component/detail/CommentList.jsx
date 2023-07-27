@@ -11,6 +11,7 @@ function CommentList({ data }) {
     const loginUser = JSON.parse(localStorage.getItem("logInUser"));
     const queryClient = useQueryClient();
 
+    // 댓글 삭제
     const deleteMutation = useMutation((id) => deleteCommentsApi(data.postId, id), {
         onSuccess: (response) => {
             queryClient.invalidateQueries(["posts", data.postId]);
@@ -22,6 +23,7 @@ function CommentList({ data }) {
         deleteMutation.mutate(data.comments.commentId);
     }
 
+    // 댓글 작성 시간
     const displayedAt = (createdAt) => {
         const milliSeconds = new Date() - createdAt
         const seconds = milliSeconds / 1000
@@ -81,10 +83,10 @@ function CommentList({ data }) {
                                                 <CommentSpan>1</CommentSpan>
                                             </CommentLikeButton>
                                         </CommentBottomItem>
-                                        <CommentBottomItem>
+                                        {/* <CommentBottomItem>
                                             <CommentBottomDot>・</CommentBottomDot>
                                             <CommentButton>답글 달기</CommentButton>
-                                        </CommentBottomItem>
+                                        </CommentBottomItem> */}
                                         {
                                             (loginUser && (loginUser.nickname === item.nickname)) && (
                                                 <CommentBottomItem>
@@ -100,7 +102,7 @@ function CommentList({ data }) {
                     )
                 })
             }
-            <CommentPageSection>
+            {/* <CommentPageSection>
                 <CommentLRButton>
                     <Left />
                 </CommentLRButton>
@@ -116,7 +118,7 @@ function CommentList({ data }) {
                 <CommentLRButton style={{ marginRight: "0px" }}>
                     <Right />
                 </CommentLRButton>
-            </CommentPageSection>
+            </CommentPageSection> */}
         </>
     )
 }

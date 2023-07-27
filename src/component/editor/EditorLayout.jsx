@@ -5,7 +5,6 @@ import EditorHeader from './EditorHeader';
 import EditorCategory from './EditorCategory';
 import { getDetailPostApi, postPostsApi, updatePostApi } from '../../api/posts';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
 import { v4 as uuidv4 } from 'uuid';
 
 function EditorLayout() {
@@ -74,13 +73,13 @@ function EditorLayout() {
         });
         formData.set("imageCount", editorList.length);
         try {
-            if (id) {
+            if (id) { // 게시물 postId가 있으면 수정
                 const res = await updatePostApi(id, formData);
                 if (res.status <= 300) {
                     console.log("성공", res);
                     navigate(-1);
                 };
-            } else {
+            } else { // 게시물 postId가 없으면 신규 작성
                 const res = await postPostsApi(formData);
                 if (res.status <= 300) {
                     console.log("성공", res);
@@ -92,6 +91,7 @@ function EditorLayout() {
         };
     };
 
+    // 수정일 때 기존 사진, 내용을 editorList에 넣기
     const getEditorList = (postDetails) => {
         if (!Array.isArray(postDetails) || postDetails.length === 0) {
             return;
@@ -117,14 +117,14 @@ function EditorLayout() {
         }
     }, [editorList])
 
+    // 수정일 때 기존 사진, 내용을 editorList에 넣기
     useEffect(() => {
-        async function fetchData() {
+        const fetchData = async () => {
             if (id) {
                 const res = await getDetailPostApi(id);
                 const temp = res.data.data;
                 getEditorList(temp.postDetails);
                 setCategory(temp.category);
-                console.log(temp);
             }
         }
         fetchData();
